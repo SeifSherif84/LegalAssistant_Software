@@ -15,7 +15,7 @@ namespace Domain.Entities
         public DateTime UpdatedAt { get; set; }
         public int FileNumber { get; set; }
         public string CourtName { get; set; }
-        public string Status { get; set; }
+        public Status Status { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public DateTime NextHearingDate { get; set; }
         public DateTime VerdictDate { get; set; }
