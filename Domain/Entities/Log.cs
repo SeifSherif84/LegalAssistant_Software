@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal class Test2
+    public class Log
     {
-
     }
 }
