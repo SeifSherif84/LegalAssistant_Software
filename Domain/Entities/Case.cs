@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Domain.Entities
         public DateTime UpdatedAt { get; set; }
         public int FileNumber { get; set; }
         public string CourtName { get; set; }
-        public Status Status { get; set; }
+        public CaseStatus Status { get; set; }
         public DateTime? NextHearingDate { get; set; }
         public DateTime? VerdictDate { get; set; }
         public string Notes { get; set; }
