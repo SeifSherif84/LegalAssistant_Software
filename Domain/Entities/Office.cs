@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Office
+    public class Office : BaseEntity<int>
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public Address Address { get; set; }
         public ContactInfo ContactInfo { get; set; }
 
-
         public List<Lawyer> Lawyers { get; set; } // One-to-Many relationship with Lawyer
+        public List<Employee> Employees { get; set; } // One-to-Many relationship with Employee
     }
 }

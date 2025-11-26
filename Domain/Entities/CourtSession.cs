@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class CourtSession
+    public class CourtSession : BaseEntity<int>
     {
-        public int Id { get; set; }
-
         public DateTime SessionDate { get; set; }
 
         public string Location { get; set; }

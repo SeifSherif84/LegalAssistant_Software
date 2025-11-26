@@ -20,9 +20,10 @@ namespace Domain.Entities
         public DateTime? VerdictDate { get; set; }
         public string Notes { get; set; }
 
-
+        public List<Document> Documents { get; set; } // One-to-Many relationship with Document
+        public List<CourtSession> CourtSessions { get; set; } // One-to-Many relationship with CourtSession
+        public List<Decision> Decisions { get; set; } // One-to-Many relationship with Decision
         public List<Lawyer> Lawyers { get; set; } // Many-to-Many relationship with Lawyer
-
         public List<CaseParty> CaseParties { get; set; } // One-to-Many relationship with CaseParty
 
 

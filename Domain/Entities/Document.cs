@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Document
+    public class Document : BaseEntity<int>
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         public string FilePath { get; set; }
         public DateTime UploadedAt { get; set; }
+
+
+        public int CaseId { get; set; }
         public Case Case { get; set; }
     }
 }

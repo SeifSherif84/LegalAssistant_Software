@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class CaseParty
+    public class CaseParty : BaseEntity<int>
     {
-        public int Id { get; set; }
-
         public int CaseId { get; set; } // Foreign key to Case
         public Case Case { get; set; } // Navigation property to Case
 
 
         public int PersonId { get; set; } // Foreign key to Person
-        public Person<int> Person { get; set; } // Navigation property to Person
+        public Person Person { get; set; } // Navigation property to Person
 
 
         // Defendant-specific

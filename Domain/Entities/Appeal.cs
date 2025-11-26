@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Appeal
+    public class Appeal : BaseEntity<int>
     {
-        public int Id { get; set; }
         public DateTime FiledDate { get; set; }
         public string AppealType { get; set; }
         public string Status { get; set; }

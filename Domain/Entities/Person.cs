@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Person<TKey> : BaseEntity<TKey>
+    public class Person : BaseEntity<int>
     {
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public Address Address { get; set; }
+        public Address Address { get; set; } 
         public string NationalIdNumber { get; set; }
         public ContactInfo ContactInfo { get; set; } 
     }

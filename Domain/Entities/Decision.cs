@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Decision
+    public class Decision : BaseEntity<int>
     {
-        public int Id { get; set; }
         public DateTime DecisionDate { get; set; }
         public string DecisionType { get; set; }
         public bool Appealable { get; set; }
         public string DecisionText { get; set; }
         public DateTime AppealDeadline { get; set; }
+
+        public int CaseId { get; set; }
         public Case Case { get; set; }
 
     }
