@@ -30,7 +30,7 @@ namespace Domain.Entities
         public PartyRole Role { get; set; }
 
 
-        public int? LawyerId { get; set; } // Foreign key to Lawyer
+        public string? LawyerId { get; set; } // Foreign key to Lawyer
         public Lawyer? Lawyer { get; set; } // Navigation property to Lawyer
 
 

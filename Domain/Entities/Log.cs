@@ -9,7 +9,7 @@ namespace Domain.Entities
 {
     public class Log : BaseEntity<int>
     {
-        public Guid UserId { get; set; } // Foreign key to UserApp
+        public string UserId { get; set; } // Foreign key to UserApp
         public UserApp User { get; set; } // 
 
 

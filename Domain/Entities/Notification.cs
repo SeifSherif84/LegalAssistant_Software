@@ -31,8 +31,8 @@ public class Notification
 
     // FK to Identity User (GUID) — the account who should receive the notification
     [Required]
-    public Guid UserId { get; set; }
-    public UserApp? User { get; set; }
+    public string UserId { get; set; }
+    public UserApp User { get; set; }
 
     // Human-readable message (short)
     [Required, MaxLength(1024)]

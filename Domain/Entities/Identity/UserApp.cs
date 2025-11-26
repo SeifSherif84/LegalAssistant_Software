@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Identity
 {
-    public abstract class UserApp : IdentityUser<Guid>
+    public class UserApp : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
