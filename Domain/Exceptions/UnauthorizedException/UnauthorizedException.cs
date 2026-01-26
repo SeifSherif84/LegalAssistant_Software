@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Exceptions.UnauthorizedException
 {
-    internal class Test3
+    public class UnauthorizedException(string message) : Exception(message)
     {
-
     }
 }

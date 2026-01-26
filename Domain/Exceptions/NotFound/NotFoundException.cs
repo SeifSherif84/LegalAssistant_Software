@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Exceptions.NotFound
 {
-    internal class Test
+    public class NotFoundException(string message) : Exception(message)
     {
-
     }
 }

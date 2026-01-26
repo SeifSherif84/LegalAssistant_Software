@@ -13,7 +13,7 @@ namespace Persistence.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserApp> builder)
         {
-            builder.OwnsOne(U => U.Address);
+
         }
     }
 }

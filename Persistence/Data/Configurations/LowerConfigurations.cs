@@ -13,7 +13,8 @@ namespace Persistence.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Lawyer> builder)
         {
-            builder.Property(L => L.HourlyRate).HasColumnType("decimal(18,2)");
+
+
         }
     }
 }

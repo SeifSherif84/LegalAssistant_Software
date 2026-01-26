@@ -284,9 +284,6 @@ namespace Persistence.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -324,10 +321,6 @@ namespace Persistence.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -688,14 +681,23 @@ namespace Persistence.Data.Migrations
                 {
                     b.HasBaseType("Domain.Entities.Identity.UserApp");
 
-                    b.Property<decimal>("HourlyRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("BarIdCardUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OfficeId")
+                    b.Property<string>("BarRegistrationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LawyerStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("Specialty")
+                    b.Property<int?>("OfficeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
@@ -798,44 +800,6 @@ namespace Persistence.Data.Migrations
                         .HasForeignKey("CourtSessionId");
 
                     b.Navigation("Case");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.UserApp", b =>
-                {
-                    b.OwnsOne("Domain.Entities.HelperClass.Address", "Address", b1 =>
-                        {
-                            b1.Property<string>("UserAppId")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<int>("BuildingNumber")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("ZipCode")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("UserAppId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserAppId");
-                        });
-
-                    b.Navigation("Address")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Log", b =>
@@ -1092,9 +1056,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasOne("Domain.Entities.Office", "Office")
                         .WithMany("Lawyers")
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OfficeId");
 
                     b.Navigation("Office");
                 });
