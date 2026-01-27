@@ -19,13 +19,9 @@ namespace Domain.Entities
 
         public List<Case> Cases { get; set; } // Many-to-Many relationship with Case
 
-        public int? OfficeId { get; set; }
-        public Office? Office { get; set; } // Many-to-One relationship with Office
+        public List<Document> Documents { get; set; } // One-to-Many relationship with Document
 
-
-
-        // public decimal HourlyRate { get; set; }
-        // public Specialties Specialty { get; set; }
+        public List<Appeal> Appeals { get; set; } // One-to-Many relationship with Appeal
 
     }
 }

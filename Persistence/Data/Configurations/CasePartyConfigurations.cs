@@ -22,6 +22,11 @@ namespace Persistence.Data.Configurations
                   .WithOne()
                   .HasForeignKey<CaseParty>(CP => CP.LawyerId)
                   .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(cp => cp.Case)
+                   .WithMany(c => c.CaseParties)
+                   .HasForeignKey(cp => cp.CaseId)
+                   .OnDelete(DeleteBehavior.Cascade); // لو القضية اتحذفت، أطرافها يتحذفوا
         }
     }
 }

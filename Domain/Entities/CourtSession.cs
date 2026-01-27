@@ -18,8 +18,7 @@ namespace Domain.Entities
         public int CaseId { get; set; }
         public Case Case { get; set; }
 
-        public int? DecisionId { get; set; }
-        public Decision? Decision { get; set; }
+        public List<Decision> Decisions { get; set; } = new();
 
         public List<Document> Documents { get; set; } = new();
 

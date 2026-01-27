@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Enums
 {
-    public enum PartyRole
+    // مستوى ثقة الذكاء الاصطناعي في النتيجة
+    public enum ConfidenceLevel
     {
-        DEFENDANT = 1,
-        VICTIM = 2,
-        WITNESS = 3,
-        PLAINTIFF = 4,
-        APPELLANT = 5
+        Low = 1,
+        Medium = 2,
+        High = 3
     }
-
-
 }

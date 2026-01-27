@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Enums
 {
-    public enum PartyRole
+    public enum Gender
     {
-        DEFENDANT = 1,
-        VICTIM = 2,
-        WITNESS = 3,
-        PLAINTIFF = 4,
-        APPELLANT = 5
+        Male = 1,
+        Female = 2
     }
-
-
 }

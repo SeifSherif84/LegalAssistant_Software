@@ -17,24 +17,28 @@ namespace Domain.Entities
         public Person Person { get; set; } // Navigation property to Person
 
 
-        // Defendant-specific
+        // Defendant-specific 
+        // معلومات عن الجريمة المرتكبة لو الطرف هو متهم
         public string? crimeDescription { get; set; }
         public DateTime? crimeDate { get; set; }
 
 
         // Witness-specific
+        // معلومات عن شهادة الشاهد لو الطرف هو شاهد
         public string? TestimonyText { get; set; }
         public DateTime? TestimonyDate { get; set; }
 
 
         public PartyRole Role { get; set; }
 
-
+        // Lawyer information
+        // المحامي اللي بيمثل الطرف في القضية
+        // لو مفيش محامي، القيمة هتكون null
         public string? LawyerId { get; set; } // Foreign key to Lawyer
         public Lawyer? Lawyer { get; set; } // Navigation property to Lawyer
 
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
     }
 }

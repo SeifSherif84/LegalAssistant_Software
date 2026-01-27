@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Data.Contexts;
 
@@ -11,9 +12,11 @@ using Persistence.Data.Contexts;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126201145_Delete Employee")]
+    partial class DeleteEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,42 +40,6 @@ namespace Persistence.Data.Migrations
                     b.ToTable("CaseLawyer");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AiAnalysis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnalysisType")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AnalyzedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConfidenceLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DocumentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VulnerabilitiesSummary")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CaseId");
-
-                    b.HasIndex("DocumentId");
-
-                    b.ToTable("AiAnalyses");
-                });
-
             modelBuilder.Entity("Domain.Entities.Appeal", b =>
                 {
                     b.Property<int>("Id")
@@ -81,58 +48,23 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("AppealDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("AppealType")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AppealingPartyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AppellantSide")
-                        .HasColumnType("int");
+                    b.Property<string>("AppealType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DecisionId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("FiledDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("LawyerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Notes")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Outcome")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ResultDecisionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppealingPartyId");
-
                     b.HasIndex("CaseId");
-
-                    b.HasIndex("DecisionId")
-                        .IsUnique();
-
-                    b.HasIndex("LawyerId");
-
-                    b.HasIndex("ResultDecisionId")
-                        .IsUnique()
-                        .HasFilter("[ResultDecisionId] IS NOT NULL");
 
                     b.ToTable("Appeals");
                 });
@@ -152,24 +84,18 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CrimeCategory")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FileNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Jurisdiction")
+                    b.Property<int>("FileNumber")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("NextHearingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -179,14 +105,11 @@ namespace Persistence.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("VerdictDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("crimeType")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -208,6 +131,7 @@ namespace Persistence.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PersonId")
@@ -253,6 +177,9 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DecisionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -269,6 +196,8 @@ namespace Persistence.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
+
+                    b.HasIndex("DecisionId");
 
                     b.ToTable("CourtSessions");
                 });
@@ -290,33 +219,20 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CourtSessionId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DecisionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DecisionType")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsFinalVerdict")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JudgeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SentenceText")
+                    b.Property<string>("DecisionText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SentenceType")
-                        .HasColumnType("int");
+                    b.Property<string>("DecisionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
-
-                    b.HasIndex("CourtSessionId");
 
                     b.ToTable("Decisions");
                 });
@@ -329,38 +245,23 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("AnalyzedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CourtSessionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ExtractedTextPath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAnalyzedByAI")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LawyerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadedAt")
                         .HasColumnType("datetime2");
@@ -370,8 +271,6 @@ namespace Persistence.Data.Migrations
                     b.HasIndex("CaseId");
 
                     b.HasIndex("CourtSessionId");
-
-                    b.HasIndex("LawyerId");
 
                     b.ToTable("Documents");
                 });
@@ -388,9 +287,6 @@ namespace Persistence.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -401,9 +297,6 @@ namespace Persistence.Data.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -507,6 +400,23 @@ namespace Persistence.Data.Migrations
                     b.ToTable("Logs");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Office", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Offices");
+                });
+
             modelBuilder.Entity("Domain.Entities.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -515,9 +425,6 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -525,9 +432,6 @@ namespace Persistence.Data.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
 
                     b.Property<string>("NationalIdNumber")
                         .IsRequired()
@@ -762,12 +666,17 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("LawyerStatus")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OfficeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProfilePictureUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
+
+                    b.HasIndex("OfficeId");
 
                     b.ToTable("Lawyers", (string)null);
                 });
@@ -787,7 +696,7 @@ namespace Persistence.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.AiAnalysis", b =>
+            modelBuilder.Entity("Domain.Entities.Appeal", b =>
                 {
                     b.HasOne("Domain.Entities.Case", "Case")
                         .WithMany()
@@ -795,52 +704,7 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId");
-
                     b.Navigation("Case");
-
-                    b.Navigation("Document");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Appeal", b =>
-                {
-                    b.HasOne("Domain.Entities.CaseParty", "AppealingParty")
-                        .WithMany()
-                        .HasForeignKey("AppealingPartyId");
-
-                    b.HasOne("Domain.Entities.Case", "Case")
-                        .WithMany("Appeals")
-                        .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Decision", "OriginalDecision")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Appeal", "DecisionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Lawyer", "Lawyer")
-                        .WithMany("Appeals")
-                        .HasForeignKey("LawyerId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Domain.Entities.Decision", "ResultDecision")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Appeal", "ResultDecisionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("AppealingParty");
-
-                    b.Navigation("Case");
-
-                    b.Navigation("Lawyer");
-
-                    b.Navigation("OriginalDecision");
-
-                    b.Navigation("ResultDecision");
                 });
 
             modelBuilder.Entity("Domain.Entities.CaseParty", b =>
@@ -877,7 +741,13 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Decision", "Decision")
+                        .WithMany()
+                        .HasForeignKey("DecisionId");
+
                     b.Navigation("Case");
+
+                    b.Navigation("Decision");
                 });
 
             modelBuilder.Entity("Domain.Entities.Decision", b =>
@@ -888,15 +758,7 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.CourtSession", "CourtSession")
-                        .WithMany("Decisions")
-                        .HasForeignKey("CourtSessionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Case");
-
-                    b.Navigation("CourtSession");
                 });
 
             modelBuilder.Entity("Domain.Entities.Document", b =>
@@ -911,15 +773,7 @@ namespace Persistence.Data.Migrations
                         .WithMany("Documents")
                         .HasForeignKey("CourtSessionId");
 
-                    b.HasOne("Domain.Entities.Lawyer", "Lawyer")
-                        .WithMany("Documents")
-                        .HasForeignKey("LawyerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Case");
-
-                    b.Navigation("Lawyer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Log", b =>
@@ -943,6 +797,68 @@ namespace Persistence.Data.Migrations
                     b.Navigation("CourtSession");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Office", b =>
+                {
+                    b.OwnsOne("Domain.Entities.HelperClass.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("OfficeId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("BuildingNumber")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ZipCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("OfficeId");
+
+                            b1.ToTable("Offices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OfficeId");
+                        });
+
+                    b.OwnsOne("Domain.Entities.HelperClass.ContactInfo", "ContactInfo", b1 =>
+                        {
+                            b1.Property<int>("OfficeId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Email")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("OfficeId");
+
+                            b1.ToTable("Offices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OfficeId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("ContactInfo")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Person", b =>
@@ -1094,12 +1010,16 @@ namespace Persistence.Data.Migrations
                         .HasForeignKey("Domain.Entities.Lawyer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Office", "Office")
+                        .WithMany("Lawyers")
+                        .HasForeignKey("OfficeId");
+
+                    b.Navigation("Office");
                 });
 
             modelBuilder.Entity("Domain.Entities.Case", b =>
                 {
-                    b.Navigation("Appeals");
-
                     b.Navigation("CaseParties");
 
                     b.Navigation("CourtSessions");
@@ -1111,16 +1031,12 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.CourtSession", b =>
                 {
-                    b.Navigation("Decisions");
-
                     b.Navigation("Documents");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Lawyer", b =>
+            modelBuilder.Entity("Domain.Entities.Office", b =>
                 {
-                    b.Navigation("Appeals");
-
-                    b.Navigation("Documents");
+                    b.Navigation("Lawyers");
                 });
 #pragma warning restore 612, 618
         }

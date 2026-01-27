@@ -8,9 +8,9 @@ namespace Domain.Entities.Enums
 {
     public enum LawyerStatus
     {
-        Pending = 0,   // لسه مستني موافقة الأدمن
-        Approved = 1,  // اتوافق عليه
-        Rejected = 2   // اترفض
+        Pending = 1,   // لسه مستني موافقة الأدمن
+        Approved = 2,  // اتوافق عليه
+        Rejected = 3   // اترفض
     }
 
 }

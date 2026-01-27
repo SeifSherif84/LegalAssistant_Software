@@ -1,4 +1,5 @@
-﻿using Domain.Entities.HelperClass;
+﻿using Domain.Entities.Enums;
+using Domain.Entities.HelperClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace Domain.Entities
         public Address Address { get; set; } 
         public string NationalIdNumber { get; set; }    
         public ContactInfo ContactInfo { get; set; } 
+        public DateTime DateOfBirth { get; set; }
+        public Gender Gender { get; set; }
     }
 }
