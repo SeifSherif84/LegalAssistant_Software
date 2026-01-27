@@ -28,5 +28,6 @@ namespace Presentation.Controllers.Lawyers
             var lawyer = await _serviceManager.LawyerService.GetLawyerInfo(id.Value);
             return Ok(lawyer);
         }
+
     }
 }

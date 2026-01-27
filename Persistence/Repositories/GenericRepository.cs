@@ -15,5 +15,6 @@ namespace Persistence.Repositories
             var entity = await _appDbContext.Set<TEntity>().FindAsync(key);
             return entity;
         }
+
     }
 }

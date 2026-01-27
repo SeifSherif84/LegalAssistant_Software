@@ -49,7 +49,6 @@ namespace Presentation.Controllers.Authentications
         }
 
 
-
         [HttpPost("UpdatePassword")] // POST: api/authentication/UpdatePassword
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto updatePasswordDto) 
         {
