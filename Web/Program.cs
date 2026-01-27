@@ -13,6 +13,7 @@ using Services.Abstractions;
 using Services;
 using Store.G02.Web.Middleware;
 using Company.PL.Helper.MailKitFeature;
+using Store.G02.Persistence;
 
 namespace Web
 {
@@ -38,6 +39,8 @@ namespace Web
 
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
             var JWTOptions = builder.Configuration.GetSection("JWTOptions").Get<JWTOptions>();
             builder.Services.AddAuthentication(options =>

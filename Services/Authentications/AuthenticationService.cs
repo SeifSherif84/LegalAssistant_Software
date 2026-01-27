@@ -137,5 +137,7 @@ namespace Services.Authentications
             var result = await _userManager.ResetPasswordAsync(user, decodedToken, updatePasswordDto.NewPassword);
             return result;
         }
+
+
     }
 }

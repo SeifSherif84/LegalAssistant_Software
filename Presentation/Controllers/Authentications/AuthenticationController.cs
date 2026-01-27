@@ -8,6 +8,7 @@ using Shared.Dtos.Authentications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,8 +61,6 @@ namespace Presentation.Controllers.Authentications
                 return BadRequest(result.Errors);
             return Ok("Password updated successfully.");
         }
-
-
 
     }
 }
