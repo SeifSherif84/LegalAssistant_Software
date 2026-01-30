@@ -14,6 +14,7 @@ using Services;
 using Store.G02.Web.Middleware;
 using Company.PL.Helper.MailKitFeature;
 using Store.G02.Persistence;
+using Services.Mapping.Lawyers;
 
 namespace Web
 {
@@ -71,6 +72,7 @@ namespace Web
             builder.Services.AddAutoMapper(Config =>
             {
                 Config.AddProfile(new AuthenticationProfile());
+                Config.AddProfile(new LawyerProfile(builder.Configuration));
             });
 
 

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Shared.Dtos.Lawyers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Services.Abstractions.Lawyers
 {
     public interface ILawyerService
     {
-        Task<Lawyer> GetLawyerInfo(string lawyerId);
+        Task<LawyerResponse> GetLawyerInfo(string lawyerId);
     }
 }

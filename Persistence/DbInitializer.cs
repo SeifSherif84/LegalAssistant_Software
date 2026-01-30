@@ -15,6 +15,8 @@ namespace Persistence
     {
         public async Task InitializerAsync()
         {
+            // Create the database if it does not exist
+            // Update the database to the latest version
             var migrationsPending = await _appDbContext.Database.GetPendingMigrationsAsync();
             if (migrationsPending.Any())
                 await _appDbContext.Database.MigrateAsync();

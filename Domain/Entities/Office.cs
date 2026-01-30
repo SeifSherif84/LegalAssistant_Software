@@ -12,8 +12,6 @@
 //        public string Name { get; set; }
 //        public Address Address { get; set; }
 //        public ContactInfo ContactInfo { get; set; }
-
 //        public List<Lawyer> Lawyers { get; set; } // One-to-Many relationship with Lawyer
-
 //    }
 //}

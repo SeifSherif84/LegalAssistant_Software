@@ -25,6 +25,6 @@ namespace Services
                                 IUnitOfWork _unitOfWork) : IServiceManager
     {
         public IAuthenticationService AuthenticationService { get; } = new AuthenticationService(_userManager, _JWTOptions, _mapper, _mailService);
-        public ILawyerService LawyerService => new LawyerService(_unitOfWork);
+        public ILawyerService LawyerService => new LawyerService(_unitOfWork, _mapper);
     }
 }

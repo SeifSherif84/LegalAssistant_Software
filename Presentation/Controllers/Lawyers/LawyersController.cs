@@ -25,8 +25,8 @@ namespace Presentation.Controllers.Lawyers
             if (id is null)
                 return BadRequest("id claim not found.");
 
-            var lawyer = await _serviceManager.LawyerService.GetLawyerInfo(id.Value);
-            return Ok(lawyer);
+            var lawyerResponse = await _serviceManager.LawyerService.GetLawyerInfo(id.Value);
+            return Ok(lawyerResponse);
         }
 
     }

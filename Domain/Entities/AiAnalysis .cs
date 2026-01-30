@@ -15,7 +15,7 @@ namespace Domain.Entities
         public int? DocumentId { get; set; }
         public Document? Document { get; set; }
 
-        public string VulnerabilitiesSummary { get; set; }
+        public string Vulnerabilities { get; set; }
         public ConfidenceLevel ConfidenceLevel { get; set; }
         public AnalysisType AnalysisType { get; set; }
 
