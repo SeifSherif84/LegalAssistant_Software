@@ -8,16 +8,16 @@ namespace Domain.Entities.Enums
 {
     public enum DocumentType
     {
-        PoliceReport = 1,
-        PowerOfAttorney = 2,
-        IdentityDocument = 3,
-        MedicalReport = 4,
-        EvidencePhoto = 5,
-        PleadingMemo = 6,
-        CourtOrder = 7,
-        Translation = 8,
-        FullCaseFile = 9,      // ملف القضية الكامل (التحقيقات + المحضر + التحريات)
-        InvestigationRecord = 10
+        PoliceReport = 1, // تقرير شرطة
+        PowerOfAttorney = 2, // توكيع
+        IdentityDocument = 3, // بطاقة هوية
+        MedicalReport = 4, // تقرير طبي
+        EvidencePhoto = 5, // صورة دليل
+        PleadingMemo = 6, // مذكرة دفوع
+        CourtOrder = 7, // أمر محكمة
+        Translation = 8, // ترجمة
+        FullCaseFile = 9, // (ملف القضية الكامل (التحقيقات + المحضر + التحريات)
+        InvestigationRecord = 10 // محضر تحقيقات
     }
 
 }
