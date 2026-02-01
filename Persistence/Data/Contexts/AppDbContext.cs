@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,6 +38,16 @@ namespace Persistence.Data.Contexts
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             builder.Entity<UserApp>().ToTable("Users");
             builder.Entity<Lawyer>().ToTable("Lawyers");
+            builder.Entity<UserApp>().HasQueryFilter(u => !u.IsDeleted);
+
+            builder.Entity<Document>()
+                .HasQueryFilter(d => !d.Lawyer.IsDeleted);
+
+            builder.Entity<Notification>()
+                .HasQueryFilter(n => !n.User.IsDeleted);
+
+            builder.Entity<Log>()
+                .HasQueryFilter(l => !l.User.IsDeleted);
         }
 
 

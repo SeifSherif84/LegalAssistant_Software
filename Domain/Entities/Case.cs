@@ -16,12 +16,12 @@ namespace Domain.Entities
         public string FileNumber { get; set; }
         public string CourtName { get; set; }
         public CaseStatus Status { get; set; }
-        public DateTime? NextHearingDate { get; set; }
-        public DateTime? VerdictDate { get; set; }
         public string? Notes { get; set; }
         public Jurisdiction Jurisdiction { get; set; }
         public CrimeCategory CrimeCategory { get; set; }
         public CrimeType crimeType { get; set; }
+        public string ClientName { get; set; }
+
 
         public List<Document> Documents { get; set; } // One-to-Many relationship with Document
         public List<CourtSession> CourtSessions { get; set; } // One-to-Many relationship with CourtSession
@@ -38,6 +38,8 @@ namespace Domain.Entities
         public List<Lawyer> Lawyers { get; set; } // Many-to-Many relationship with Lawyer
         public List<CaseParty> CaseParties { get; set; } // One-to-Many relationship with CaseParty
 
+        // public DateTime? NextHearingDate { get; set; }
+        // public DateTime? VerdictDate { get; set; }
 
     }
 }

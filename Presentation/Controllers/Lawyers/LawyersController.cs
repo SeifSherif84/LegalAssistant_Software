@@ -16,7 +16,7 @@ namespace Presentation.Controllers.Lawyers
     [Route("api/[controller]")]
     public class LawyersController(IServiceManager _serviceManager) : ControllerBase
     {
-
+        // GET: api/lawyers/GetLawyerInfo
         [HttpGet("GetLawyerInfo")]
         [Authorize]
         public async Task<IActionResult> GetLawyerInfo()

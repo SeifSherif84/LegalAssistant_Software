@@ -16,5 +16,6 @@ namespace Services.Abstractions.Authentications
         Task<LawyerRegisterResponse?> Register(LawyerRegisterRequest registerRequest);
         Task<bool> ResetPasswordByEmail(ResetPasswordByEmailDto model);
         Task<IdentityResult> UpdatePassword(UpdatePasswordDto updatePasswordDto);
+        Task<IdentityResult> DeleteAccountAsync(string userId);
     }
 }

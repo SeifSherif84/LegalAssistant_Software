@@ -60,7 +60,7 @@ namespace Persistence.Data.Migrations
                     b.Property<int?>("DocumentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("VulnerabilitiesSummary")
+                    b.Property<string>("Vulnerabilities")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -145,6 +145,10 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CourtName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -166,9 +170,6 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("Jurisdiction")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("NextHearingDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -180,9 +181,6 @@ namespace Persistence.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("VerdictDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("crimeType")
@@ -338,9 +336,6 @@ namespace Persistence.Data.Migrations
                     b.Property<int?>("CourtSessionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ExtractedTextPath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -391,6 +386,9 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -402,7 +400,7 @@ namespace Persistence.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")

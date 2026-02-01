@@ -32,7 +32,6 @@ namespace Shared.Dtos.Authentications
         public IFormFile BarIdCard { get; set; }
         public string? BarIdCardUrl { get; set; }   
 
-
     }
 
 }

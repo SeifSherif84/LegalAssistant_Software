@@ -17,7 +17,7 @@ namespace Services.Mapping.Lawyers
         {
             if (!string.IsNullOrEmpty(source.ProfilePictureUrl))
             {
-                destMember = $"{_configuration["BaseURL"]}/files/images/lawyerprofile/{source.ProfilePictureUrl}";
+                destMember = $"{_configuration["TunnleBaseURL"]}/files/images/lawyerprofile/{source.ProfilePictureUrl}";
                 return destMember;
             }
             return string.Empty;

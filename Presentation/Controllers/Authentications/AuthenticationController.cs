@@ -61,5 +61,19 @@ namespace Presentation.Controllers.Authentications
             return Ok("Password updated successfully.");
         }
 
+
+        [Authorize]
+        [HttpDelete("DeleteAccount")] // DELETE: api/authentication/DeleteAccount
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return BadRequest("id claim not found.");
+            var result = await _serviceManager.AuthenticationService.DeleteAccountAsync(userId.Value);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+            return Ok("Account deleted successfully.");
+        }
+
     }
 }

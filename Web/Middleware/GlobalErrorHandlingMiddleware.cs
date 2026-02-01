@@ -2,9 +2,9 @@
 using Domain.Exceptions.BadRequest;
 using Domain.Exceptions.NotFound;
 using Domain.Exceptions.UnauthorizedException;
-using Store.G02.Shared.ErrorModels;
+using Shared.ErrorModels;
 
-namespace Store.G02.Web.Middleware
+namespace Web.Middleware
 {
     public class GlobalErrorHandlingMiddleware
     {
