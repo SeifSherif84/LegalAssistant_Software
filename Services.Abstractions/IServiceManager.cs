@@ -1,4 +1,6 @@
 ﻿using Services.Abstractions.Authentications;
+using Services.Abstractions.Cases;
+using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
 using System;
 using System.Collections.Generic;
@@ -12,5 +14,7 @@ namespace Services.Abstractions
     {
         IAuthenticationService AuthenticationService { get; }
         ILawyerService LawyerService { get; }
+        ICaseService CaseService { get; }
+        IDocumentService DocumentService { get; }
     }
 }

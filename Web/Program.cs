@@ -11,10 +11,12 @@ using Persistence;
 using Services.Mapping.Authentications;
 using Services.Abstractions;
 using Services;
-using Store.G02.Web.Middleware;
+using Web.Middleware;
 using Company.PL.Helper.MailKitFeature;
 using Store.G02.Persistence;
 using Services.Mapping.Lawyers;
+using Services.Mapping.Cases;
+using Services.Mapping.Documents;
 
 namespace Web
 {
@@ -73,6 +75,8 @@ namespace Web
             {
                 Config.AddProfile(new AuthenticationProfile());
                 Config.AddProfile(new LawyerProfile(builder.Configuration));
+                Config.AddProfile(new CaseProfile());
+                Config.AddProfile(new DocumentProfile());
             });
 
 
@@ -110,6 +114,8 @@ namespace Web
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<CheckUserStatusMiddleware>();
 
             app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 

@@ -18,7 +18,8 @@ namespace Domain.Entities
 
         public bool IsAnalyzedByAI { get; set; }
         public DateTime? AnalyzedAt { get; set; }
-        public string? ExtractedTextPath { get; set; } // النص اللي الـ AI اشتغل عليه
+
+        //public string? ExtractedTextPath { get; set; } // النص اللي الـ AI اشتغل عليه
 
         public string LawyerId { get; set; }
         public Lawyer Lawyer { get; set; } // المحامي اللي رفع المستند

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Domain.Exceptions.NotFound;
 using Services.Abstractions.Lawyers;
+using Services.Specifications.Lawyers;
 using Shared.Dtos.Lawyers;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,8 @@ namespace Services.Lawyers
     {
         public async Task<LawyerResponse?> GetLawyerInfo(string lawyerId)
         {
-            var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(lawyerId);
+            var specifications = new LawyerSpecifications(lawyerId);
+            var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(specifications);
             return _mapper.Map<LawyerResponse>(lawyer);             
         }
 

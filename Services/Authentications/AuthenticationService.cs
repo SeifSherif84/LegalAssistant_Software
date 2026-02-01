@@ -20,13 +20,15 @@ using Domain.Exceptions.BadRequest;
 using Services.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Company.PL.Helper.MailKitFeature;
+using Microsoft.Extensions.Configuration;
 
 namespace Services.Authentications
 {
     public class AuthenticationService(UserManager<UserApp> _userManager, 
                                        IOptions<JWTOptions> _JWTOptions,
                                        IMapper _mapper,
-                                       IMailService _mailService) : IAuthenticationService
+                                       IMailService _mailService,
+                                       IConfiguration _configuration) : IAuthenticationService
     {
         public async Task<LawyerLoginResponse?> Login(LawyerLoginRequest loginRequest)
         {
@@ -111,7 +113,7 @@ namespace Services.Authentications
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = System.Web.HttpUtility.UrlEncode(token);
 
-            var frontendUrl = "http://localhost:4300/resetPassword";
+            var frontendUrl = _configuration["FrontendResetPasswordFormURL"];
 
             var callbackUrl = $"{frontendUrl}?email={model.Email}&token={encodedToken}";
 
@@ -139,5 +141,14 @@ namespace Services.Authentications
         }
 
 
+        public async Task<IdentityResult> DeleteAccountAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null || user.IsDeleted)
+                throw new UserNotFoundException("User not found or already deleted.");
+            user.IsDeleted = true;
+            user.DeletedAt = DateTime.UtcNow;
+            return await _userManager.UpdateAsync(user);
+        }
     }
 }

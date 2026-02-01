@@ -8,7 +8,7 @@ namespace Domain.Entities.Enums
 {
     public enum CaseStatus
     {
-        Open = 1,
+        Open = 1, 
         Closed = 2,
         Pending = 3,
         OnHold = 4,

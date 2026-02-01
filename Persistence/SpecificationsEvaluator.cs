@@ -1,0 +1,31 @@
+﻿using Domain.Contracts;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
+namespace Persistence
+{
+    public static class SpecificationsEvaluator
+    {
+        public static IQueryable<TEntity> GenerateQuery<TKey, TEntity>(IQueryable<TEntity> baseQuery, 
+                                                                       IBaseSpecifications<TKey, TEntity> specifications) 
+                                                                       where TEntity : class
+        {
+            IQueryable<TEntity> generatedQuery = baseQuery; // _context.Set<TEntity>();
+
+
+            if (specifications.Criteria is not null)
+                generatedQuery = generatedQuery.Where(specifications.Criteria); // _context.Set<TEntity>().Where(specifications.Criteria);
+
+            if (specifications.Includes.Count > 0)
+                generatedQuery = specifications.Includes.Aggregate(generatedQuery, (currentQuery, includeExpression) => currentQuery.Include(includeExpression)); // _context.Set<TEntity>().Include(includeExpression);
+
+            return generatedQuery;
+        }
+
+    }
+}
