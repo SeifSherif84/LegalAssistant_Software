@@ -17,6 +17,7 @@ using Store.G02.Persistence;
 using Services.Mapping.Lawyers;
 using Services.Mapping.Cases;
 using Services.Mapping.Documents;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Web
 {
@@ -77,6 +78,23 @@ namespace Web
                 Config.AddProfile(new LawyerProfile(builder.Configuration));
                 Config.AddProfile(new CaseProfile());
                 Config.AddProfile(new DocumentProfile());
+            });
+
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState.Values
+                                                   .SelectMany(V => V.Errors)
+                                                   .Select(E => E.ErrorMessage)
+                                                   .ToList();
+                    return new BadRequestObjectResult(new
+                    {
+                        Message = "Invalid data. Please check the provided information.",
+                        Errors = errors,
+                    });
+                };
             });
 
 

@@ -16,6 +16,9 @@ namespace Services.Mapping.Lawyers
         {
             CreateMap<Lawyer, LawyerResponse>()
                 .ForMember(D => D.ProfilePictureUrl, C => C.MapFrom(new LawyerProfilePictureSolver(_configuration)));
+
+            CreateMap<LawyerUpdateRequest, Lawyer>();
+            CreateMap<LawyerUpdateProfilePictureRequest, Lawyer>();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Services.Helper
 
         public static void DeleteProfilePicture(string fileName, string folderName)
         {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\files", folderName, fileName);
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\files\images", folderName, fileName);
             if (File.Exists(filePath))
                 File.Delete(filePath);
         }

@@ -18,7 +18,7 @@ namespace Presentation.Controllers.Cases
     [ApiController]
     public class CasesController(IServiceManager _serviceManager) : ControllerBase
     {
-        [HttpGet("GetCrimeType")]
+        [HttpGet("GetCrimeType")] // GET: api/Cases/GetCrimeType
         [Authorize]
         public IActionResult GetCrimeType()
         {
@@ -33,7 +33,8 @@ namespace Presentation.Controllers.Cases
         }
 
 
-        [HttpGet("GetJurisdiction")]
+
+        [HttpGet("GetJurisdiction")] // GET: api/Cases/GetJurisdiction
         [Authorize]
         public IActionResult GetJurisdiction()
         {
@@ -48,7 +49,8 @@ namespace Presentation.Controllers.Cases
         }
 
 
-        [HttpGet("GetCrimeCategory")]
+
+        [HttpGet("GetCrimeCategory")] // GET: api/Cases/GetCrimeCategory
         [Authorize]
         public IActionResult GetCrimeCategory()
         {
@@ -63,27 +65,24 @@ namespace Presentation.Controllers.Cases
         }
 
 
-        [HttpPost("CreateCase")]
+
+        [HttpPost("CreateCase")] // GET: api/Cases/CreateCase
         [Authorize]
         public async Task<IActionResult> CreateCase([FromBody]CreateCaseRequest createCaseRequest)
         {
-            var lawyerId = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (lawyerId is null)
-                return BadRequest("id claim not found.");
-
-            await _serviceManager.CaseService.CreateCaseAsync(createCaseRequest, lawyerId.Value);
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.CaseService.CreateCaseAsync(createCaseRequest, lawyerId);
             return Ok("Case created successfully.");
         }
 
 
-        [HttpGet("GetAllCases")] // api/Cases/GetAllCases
+
+        [HttpGet("GetAllCases")] // GET: api/Cases/GetAllCases
         [Authorize]
         public async Task<IActionResult> GetAllCases()
         {
-            var lawyerId = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (lawyerId is null)
-                return BadRequest("id claim not found.");
-            var cases = await _serviceManager.CaseService.GetAllCasesAsync(lawyerId.Value);
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cases = await _serviceManager.CaseService.GetAllCasesAsync(lawyerId);
             return Ok(cases);
         }
 

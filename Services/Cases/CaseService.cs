@@ -21,6 +21,10 @@ namespace Services.Cases
     {
         public async Task CreateCaseAsync(CreateCaseRequest createCaseRequest, string LawyerId)
         {
+            // 1. Check LawyerId
+            if (string.IsNullOrEmpty(LawyerId))
+                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
+
             var newCase = _mapper.Map<Case>(createCaseRequest);
             newCase.CreatedAt = DateTime.UtcNow;
             newCase.UpdatedAt = DateTime.UtcNow;
@@ -41,6 +45,10 @@ namespace Services.Cases
 
         public async Task<IEnumerable<CaseResponse>> GetAllCasesAsync(string LawyerId)
         {
+            // 1. Check LawyerId
+            if (string.IsNullOrEmpty(LawyerId))
+                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
+
             var lawyerSpecifications = new LawyerSpecifications(LawyerId);
             var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(lawyerSpecifications);
             if (lawyer is null)
@@ -49,5 +57,7 @@ namespace Services.Cases
             var cases = await _unitOfWork.GetRepository<int, Case>().GetAllAsync(caseSpecifications);
             return _mapper.Map<IEnumerable<CaseResponse>>(cases);
         }
+
+
     }
 }

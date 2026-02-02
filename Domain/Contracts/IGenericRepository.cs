@@ -12,5 +12,6 @@ namespace Domain.Contracts
         Task<TEntity?> GetByIdAsync(IBaseSpecifications<TKey, TEntity> specifications);
         Task Add(TEntity entity);
         Task<IEnumerable<TEntity>> GetAllAsync(IBaseSpecifications<TKey, TEntity> specifications);
+        void Update(TEntity entity);
     }
 }

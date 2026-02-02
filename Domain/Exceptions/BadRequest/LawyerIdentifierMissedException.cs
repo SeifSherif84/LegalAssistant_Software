@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Exceptions.BadRequest
 {
-    public class RegisterationBadRequestException(IEnumerable<string> Errors) : 
-        BadRequestException(string.Join(", ", Errors))
+    public class LawyerIdentifierMissedException(string message) : BadRequestException(message)
     {
     }
 }

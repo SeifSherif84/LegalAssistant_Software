@@ -27,8 +27,8 @@
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\files\audios\" />
     <Folder Include="wwwroot\files\Cases\Documents\" />
-    <Folder Include="wwwroot\files\images\lawyerprofile\" />
     <Folder Include="wwwroot\files\images\lawyerbarIdcard\" />
+    <Folder Include="wwwroot\files\images\lawyerprofile\" />
     <Folder Include="wwwroot\files\videos\" />
   </ItemGroup>
 

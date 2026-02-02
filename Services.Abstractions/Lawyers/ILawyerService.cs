@@ -11,5 +11,7 @@ namespace Services.Abstractions.Lawyers
     public interface ILawyerService
     {
         Task<LawyerResponse> GetLawyerInfo(string lawyerId);
+        Task Update(string lawyerId, LawyerUpdateRequest lawyerUpdateRequest);
+        Task UpdateProfilePicture(string lawyerId, LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest);
     }
 }

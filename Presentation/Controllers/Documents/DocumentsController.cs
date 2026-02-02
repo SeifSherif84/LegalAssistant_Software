@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Enums;
+using Domain.Exceptions.NotFound;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
@@ -17,8 +18,7 @@ namespace Presentation.Controllers.Documents
     [ApiController]
     public class DocumentsController(IServiceManager _serviceManager) : ControllerBase
     {
-        // api/documents/GetDocumentTypes
-        [HttpGet("GetDocumentTypes")]
+        [HttpGet("GetDocumentTypes")] // GET: api/documents/GetDocumentTypes
         [Authorize]
         public IActionResult GetDocumentTypes()
         {
@@ -36,11 +36,9 @@ namespace Presentation.Controllers.Documents
         [HttpPost("{caseId}/UploadDocument")] // POST: api/documents/{caseId}/UploadDocument
         [Authorize]
         public async Task<IActionResult> UploadDocument([FromRoute]int caseId, [FromForm] UploadDocumentRequest uploadDocumentRequest)
-        {
-            var lawyerId = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (lawyerId is null)
-                return BadRequest("id claim not found.");
-            await _serviceManager.DocumentService.UploadDocumentAsync(caseId, lawyerId.Value, uploadDocumentRequest);
+        {            
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get Value Directly From Identifier Claim
+            await _serviceManager.DocumentService.UploadDocumentAsync(caseId, lawyerId, uploadDocumentRequest);
             return Ok("Document uploaded successfully.");
         }
 

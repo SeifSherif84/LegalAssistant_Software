@@ -22,6 +22,11 @@ namespace Persistence.Repositories
             await _appDbContext.Set<TEntity>().AddAsync(entity);
         }
 
+        public void Update(TEntity entity)
+        {
+            _appDbContext.Set<TEntity>().Update(entity);
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync(IBaseSpecifications<TKey, TEntity> specifications)
         {
             return await ApplySpecifications(specifications).ToListAsync();

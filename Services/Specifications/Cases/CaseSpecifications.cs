@@ -12,14 +12,27 @@ namespace Services.Specifications.Cases
         // Get all cases for a specific lawyer Without includes
         public CaseSpecifications(string lawyerId) : base()
         {
-            ApplyFilteration(lawyerId);
+            ApplyFilterationToGetAllCaseForSpecificLawyer(lawyerId);
         }
 
-        private void ApplyFilteration(string lawyerId)
+        // Get case by Id Without includes
+        public CaseSpecifications(int caseId) : base()
+        {
+            ApplyFilterationToGetCaseById(caseId);
+        }
+
+        // Get all cases for a specific lawyer Without includes
+        private void ApplyFilterationToGetAllCaseForSpecificLawyer(string lawyerId)
         {
             Criteria = C => C.Lawyers.Any(L => L.Id == lawyerId);
         }
 
-        
+        // Get case by Id Without includes
+        private void ApplyFilterationToGetCaseById(int caseId)
+        {
+            Criteria = C => C.Id == caseId;
+        }
+
+
     }
 }

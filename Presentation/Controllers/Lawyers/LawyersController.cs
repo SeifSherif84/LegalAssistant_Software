@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using Shared.Dtos.Lawyers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,31 @@ namespace Presentation.Controllers.Lawyers
         [Authorize]
         public async Task<IActionResult> GetLawyerInfo()
         {
-            var id = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (id is null)
-                return BadRequest("id claim not found.");
-
-            var lawyerResponse = await _serviceManager.LawyerService.GetLawyerInfo(id.Value);
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var lawyerResponse = await _serviceManager.LawyerService.GetLawyerInfo(lawyerId);
             return Ok(lawyerResponse);
+        }
+
+
+        // POST: api/lawyers/UpdateInfo
+        [HttpPost("UpdateInfo")]
+        [Authorize]
+        public async Task<IActionResult> UpdateInfo([FromBody] LawyerUpdateRequest lawyerUpdateRequest)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.LawyerService.Update(lawyerId, lawyerUpdateRequest);
+            return Ok("Lawyer info updated successfully.");
+        }
+
+
+        // POST: api/lawyers/UpdateProfilePicture
+        [HttpPost("UpdateProfilePicture")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfilePicture([FromForm] LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.LawyerService.UpdateProfilePicture(lawyerId, lawyerUpdateProfilePictureRequest);
+            return Ok("Profile picture updated successfully.");
         }
 
     }
