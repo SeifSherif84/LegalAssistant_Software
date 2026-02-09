@@ -1,14 +1,13 @@
-﻿using Domain.Contracts;
-using Domain.Entities.Enums;
+﻿using Domain.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Shared.Dtos.CourtSessions
 {
-    public class CourtSession : BaseEntity<int> , ISoftDelete
+    public class CourtSessionResponse
     {
         public DateTime SessionDate { get; set; }
         public DateTime? ReminderDate { get; set; }
@@ -26,19 +25,5 @@ namespace Domain.Entities
         public string? CancelledReason { get; set; }
 
         public string? Notes { get; set; }
-
-        public int? NextSessionId { get; set; }
-        public virtual CourtSession? NextSession { get; set; } // الـ Navigation Property
-
-        public int CaseId { get; set; }
-        public Case Case { get; set; }
-
-        public List<Decision> Decisions { get; set; } = new();
-
-        public List<Document> Documents { get; set; } = new();
-
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
     }
-
 }

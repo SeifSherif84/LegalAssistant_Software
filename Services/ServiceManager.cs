@@ -8,10 +8,12 @@ using Microsoft.Extensions.Options;
 using Services.Abstractions;
 using Services.Abstractions.Authentications;
 using Services.Abstractions.Cases;
+using Services.Abstractions.CourtSessions;
 using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
 using Services.Authentications;
 using Services.Cases;
+using Services.CourtSessions;
 using Services.Documents;
 using Services.Lawyers;
 using Shared.Dtos.Authentications;
@@ -34,5 +36,6 @@ namespace Services
         public ILawyerService LawyerService => new LawyerService(_unitOfWork, _mapper);
         public ICaseService CaseService => new CaseService(_mapper, _unitOfWork);
         public IDocumentService DocumentService => new DocumentService(_mapper, _unitOfWork);
+        public ICourtSessionService CourtSessionService => new CourtSessionService(_mapper, _unitOfWork);
     }
 }

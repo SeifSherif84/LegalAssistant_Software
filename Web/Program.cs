@@ -18,6 +18,7 @@ using Services.Mapping.Lawyers;
 using Services.Mapping.Cases;
 using Services.Mapping.Documents;
 using Microsoft.AspNetCore.Mvc;
+using Services.Mapping.CourtSessions;
 
 namespace Web
 {
@@ -78,6 +79,7 @@ namespace Web
                 Config.AddProfile(new LawyerProfile(builder.Configuration));
                 Config.AddProfile(new CaseProfile());
                 Config.AddProfile(new DocumentProfile());
+                Config.AddProfile(new CourtSessionProfile());
             });
 
 

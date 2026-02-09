@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Contracts;
+using Domain.Entities.Enums;
 using Domain.Entities.HelperClass;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Person : BaseEntity<int>
+    public class Person : BaseEntity<int> , ISoftDelete
     {
         public string FullName { get; set; }
         public string Email { get; set; }
@@ -18,5 +19,8 @@ namespace Domain.Entities
         public ContactInfo ContactInfo { get; set; } 
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }

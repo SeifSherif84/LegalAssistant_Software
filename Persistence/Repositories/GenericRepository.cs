@@ -27,6 +27,11 @@ namespace Persistence.Repositories
             _appDbContext.Set<TEntity>().Update(entity);
         }
 
+        public void Delete(TEntity entity)
+        {
+            _appDbContext.Set<TEntity>().Remove(entity);
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync(IBaseSpecifications<TKey, TEntity> specifications)
         {
             return await ApplySpecifications(specifications).ToListAsync();
