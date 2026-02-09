@@ -27,7 +27,13 @@ namespace Services.Documents
                 throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
 
             // 2. Check Case Existence
-            var caseSpecifications = new CaseSpecifications(caseId);
+            var caseSpecifications = new CaseSpecifications(caseId, false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false);
             var caseEntity = await _unitOfWork.GetRepository<int, Case>().GetByIdAsync(caseSpecifications);
             if (caseEntity is null)
                 throw new CaseNotFoundException($"Case with id : {caseId} not found.");

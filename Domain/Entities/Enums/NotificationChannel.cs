@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Exceptions.BadRequest
+namespace Domain.Entities.Enums
 {
-    public class CaseCreationFailed(string message) : BadRequestException(message)
+    public enum NotificationChannel
     {
+        InApp,
+        Email,
+        Sms,
+        Push
     }
 }

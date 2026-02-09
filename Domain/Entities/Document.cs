@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Contracts;
+using Domain.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Document : BaseEntity<int>
+    public class Document : BaseEntity<int>, ISoftDelete
     {
         public string Title { get; set; }
         public DocumentType Type { get; set; }
@@ -19,7 +20,6 @@ namespace Domain.Entities
         public bool IsAnalyzedByAI { get; set; }
         public DateTime? AnalyzedAt { get; set; }
 
-        //public string? ExtractedTextPath { get; set; } // النص اللي الـ AI اشتغل عليه
 
         public string LawyerId { get; set; }
         public Lawyer Lawyer { get; set; } // المحامي اللي رفع المستند
@@ -27,5 +27,9 @@ namespace Domain.Entities
 
         public int CaseId { get; set; }
         public Case Case { get; set; }
+
+
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }

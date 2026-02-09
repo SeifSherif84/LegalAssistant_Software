@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Data.Contexts;
 
@@ -11,9 +12,11 @@ using Persistence.Data.Contexts;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260204034604_ModifyDatabase")]
+    partial class ModifyDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,51 +275,24 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AdjournmentReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CancelledReason")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
-
-                    b.Property<string>("CourtName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CourtRoom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Floor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("JudgeName")
+                    b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NextSessionId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ReminderDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("SessionDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("SessionStatus")
-                        .HasColumnType("int");
 
                     b.Property<int>("SessionType")
                         .HasColumnType("int");
@@ -324,8 +300,6 @@ namespace Persistence.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
-
-                    b.HasIndex("NextSessionId");
 
                     b.ToTable("CourtSessions");
                 });
@@ -593,9 +567,6 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -606,9 +577,6 @@ namespace Persistence.Data.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("NationalIdNumber")
                         .IsRequired()
@@ -964,13 +932,7 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.CourtSession", "NextSession")
-                        .WithMany()
-                        .HasForeignKey("NextSessionId");
-
                     b.Navigation("Case");
-
-                    b.Navigation("NextSession");
                 });
 
             modelBuilder.Entity("Domain.Entities.Decision", b =>

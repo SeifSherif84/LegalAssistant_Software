@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Contracts;
+using Domain.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Appeal : BaseEntity<int>
+    public class Appeal : BaseEntity<int> , ISoftDelete
     {
         public DateTime AppealDate { get; set; } // تاريخ الاستئناف
         public AppealType AppealType { get; set; } // نوع الاستئناف (مثلاً: استئناف أولي، استئناف نهائي)
@@ -40,5 +41,10 @@ namespace Domain.Entities
         // For Performance: Direct FK to Case
         public int CaseId { get; set; }
         public Case Case { get; set; } // العلاقة مع القضية
+
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
+
+
     }
 }

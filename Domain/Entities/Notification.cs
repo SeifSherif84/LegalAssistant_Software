@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts;
+using Domain.Entities;
+using Domain.Entities.Enums;
 using Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,23 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum NotificationChannel
-{
-    InApp,
-    Email,
-    Sms,
-    Push
-}
-
-public enum NotificationPriority
-{
-    Low,
-    Normal,
-    High,
-    Critical
-}
-
-public class Notification
+public class Notification : ISoftDelete 
 {
     [Key]
     public int Id { get; set; }
@@ -79,4 +65,7 @@ public class Notification
 
     // Optional admin/internal notes (not shown to user)
     public string? InternalNotes { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; }
 }

@@ -10,7 +10,9 @@ namespace Services.Abstractions.Cases
 {
     public interface ICaseService
     {
-        public Task CreateCaseAsync(CreateCaseRequest createCaseRequest, string LawyerId);
+        Task CreateCaseAsync(CreateCaseRequest createCaseRequest, string LawyerId);
         Task<IEnumerable<CaseResponse>> GetAllCasesAsync(string LawyerId);
+        Task UpdateCaseAsync(int caseId, string LawyerId, UpdateCaseRequest updateCaseRequest);
+        Task DeleteCaseAsync(int caseId, string LawyerId);
     }
 }

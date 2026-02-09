@@ -87,5 +87,28 @@ namespace Presentation.Controllers.Cases
         }
 
 
+
+        // [HttpPut("UpdateCase")] // PUT: api/Cases/UpdateCase?caseId={caseId} // [FromQuery]
+        [HttpPut("UpdateCase/{caseId}")] // PUT: api/Cases/UpdateCase/{caseId} // [FromRoute]
+        [Authorize]
+        public async Task<IActionResult> UpdateCase([FromRoute] int caseId, [FromBody] UpdateCaseRequest updateCaseRequest)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.CaseService.UpdateCaseAsync(caseId, lawyerId, updateCaseRequest);
+            return Ok("Case updated successfully.");
+        }
+
+
+
+        [HttpDelete("DeleteCase/{caseId}")] // DELETE: api/Cases/DeleteCase/{caseId}
+        [Authorize]
+        public async Task<IActionResult> DeleteCase([FromRoute] int caseId)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.CaseService.DeleteCaseAsync(caseId, lawyerId);
+            return Ok("Case deleted successfully.");
+        }
+
+
     }
 }

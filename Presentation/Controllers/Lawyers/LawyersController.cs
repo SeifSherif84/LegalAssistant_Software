@@ -17,8 +17,8 @@ namespace Presentation.Controllers.Lawyers
     [Route("api/[controller]")]
     public class LawyersController(IServiceManager _serviceManager) : ControllerBase
     {
-        // GET: api/lawyers/GetLawyerInfo
-        [HttpGet("GetLawyerInfo")]
+        
+        [HttpGet("GetLawyerInfo")] // GET: api/lawyers/GetLawyerInfo
         [Authorize]
         public async Task<IActionResult> GetLawyerInfo()
         {
@@ -28,8 +28,8 @@ namespace Presentation.Controllers.Lawyers
         }
 
 
-        // POST: api/lawyers/UpdateInfo
-        [HttpPost("UpdateInfo")]
+        
+        [HttpPut("UpdateInfo")] // PUT: api/lawyers/UpdateInfo
         [Authorize]
         public async Task<IActionResult> UpdateInfo([FromBody] LawyerUpdateRequest lawyerUpdateRequest)
         {
@@ -39,8 +39,8 @@ namespace Presentation.Controllers.Lawyers
         }
 
 
-        // POST: api/lawyers/UpdateProfilePicture
-        [HttpPost("UpdateProfilePicture")]
+        
+        [HttpPut("UpdateProfilePicture")] // PUT: api/lawyers/UpdateProfilePicture
         [Authorize]
         public async Task<IActionResult> UpdateProfilePicture([FromForm] LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest)
         {

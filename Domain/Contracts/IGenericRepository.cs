@@ -13,5 +13,6 @@ namespace Domain.Contracts
         Task Add(TEntity entity);
         Task<IEnumerable<TEntity>> GetAllAsync(IBaseSpecifications<TKey, TEntity> specifications);
         void Update(TEntity entity);
+        void Delete(TEntity entity);
     }
 }
