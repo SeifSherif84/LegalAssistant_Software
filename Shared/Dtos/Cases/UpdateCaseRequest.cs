@@ -9,14 +9,15 @@ namespace Shared.Dtos.Cases
 {
     public class UpdateCaseRequest
     {
-        public string Title { get; set; } // عنوان القضية  
-        public string Description { get; set; } // وصف القضية
-        public string FileNumber { get; set; } // رقم الملف في المحكمة
-        public string CourtName { get; set; } // اسم المحكمة
-        public string? Notes { get; set; } // ملاحظات إضافية
-        public Jurisdiction Jurisdiction { get; set; } // الاختصاص القضائي
-        public CrimeCategory CrimeCategory { get; set; } // فئة الجريمة
-        public CrimeType crimeType { get; set; } // نوع الجريمة
-        public string ClientName { get; set; } // اسم العميل
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string FileNumber { get; set; }
+        public string CourtName { get; set; }
+        public CaseStatus Status { get; set; }
+        public string? Notes { get; set; }
+        public Jurisdiction Jurisdiction { get; set; }
+        public CrimeCategory CrimeCategory { get; set; }
+        public CrimeType crimeType { get; set; }
+        public string ClientName { get; set; }
     }
 }

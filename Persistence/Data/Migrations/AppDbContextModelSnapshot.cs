@@ -87,7 +87,7 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("AppealDate")
+                    b.Property<DateTime?>("AppealDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("AppealType")
@@ -137,14 +137,11 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.HasIndex("DecisionId")
-                        .IsUnique();
+                    b.HasIndex("DecisionId");
 
                     b.HasIndex("LawyerId");
 
-                    b.HasIndex("ResultDecisionId")
-                        .IsUnique()
-                        .HasFilter("[ResultDecisionId] IS NOT NULL");
+                    b.HasIndex("ResultDecisionId");
 
                     b.ToTable("Appeals");
                 });
@@ -904,8 +901,8 @@ namespace Persistence.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Decision", "OriginalDecision")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Appeal", "DecisionId")
+                        .WithMany("Appeals")
+                        .HasForeignKey("DecisionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -915,8 +912,8 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Decision", "ResultDecision")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Appeal", "ResultDecisionId")
+                        .WithMany()
+                        .HasForeignKey("ResultDecisionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("AppealingParty");
@@ -1209,6 +1206,11 @@ namespace Persistence.Data.Migrations
                     b.Navigation("Decisions");
 
                     b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Decision", b =>
+                {
+                    b.Navigation("Appeals");
                 });
 
             modelBuilder.Entity("Domain.Entities.Lawyer", b =>

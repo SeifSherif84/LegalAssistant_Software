@@ -33,15 +33,36 @@ namespace Presentation.Controllers.Documents
         }
 
 
-        [HttpPost("{caseId}/UploadDocument")] // POST: api/documents/{caseId}/UploadDocument
-        [Authorize]
-        public async Task<IActionResult> UploadDocument([FromRoute]int caseId, [FromForm] UploadDocumentRequest uploadDocumentRequest)
-        {            
+
+        [HttpPost("UploadDocument/case/{caseId}")] // POST: api/documents/UploadDocument/case/{caseId}
+        public async Task<IActionResult> UploadDocument([FromRoute] int caseId, [FromForm] UploadDocumentRequest uploadDocumentRequest)
+        {
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get Value Directly From Identifier Claim
             await _serviceManager.DocumentService.UploadDocumentAsync(caseId, lawyerId, uploadDocumentRequest);
             return Ok("Document uploaded successfully.");
         }
 
+
+
+        [HttpGet("GetAllDocuments/case/{caseId}")] // GET: api/documents/GetAllDocuments/case/{caseId}
+        [Authorize]
+        public async Task<IActionResult> GetAllDocuments([FromRoute] int caseId)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var documents = await _serviceManager.DocumentService.GetAllDocumentsAsync(caseId, lawyerId);
+            return Ok(documents);
+        }
+
+
+
+        [HttpDelete("DeleteDocument/{documentId}")] 
+        [Authorize]
+        public async Task<IActionResult> DeleteDocument([FromRoute] int documentId)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.DocumentService.DeleteDocumentAsync(documentId, lawyerId);
+            return Ok("Document deleted successfully.");
+        }
 
     }
 }

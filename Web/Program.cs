@@ -78,7 +78,7 @@ namespace Web
                 Config.AddProfile(new AuthenticationProfile());
                 Config.AddProfile(new LawyerProfile(builder.Configuration));
                 Config.AddProfile(new CaseProfile());
-                Config.AddProfile(new DocumentProfile());
+                Config.AddProfile(new DocumentProfile(builder.Configuration));
                 Config.AddProfile(new CourtSessionProfile());
             });
 
@@ -130,6 +130,7 @@ namespace Web
             }
 
 
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
@@ -141,7 +142,6 @@ namespace Web
 
             app.MapControllers();
 
-            app.UseStaticFiles();
 
 
             app.Run();

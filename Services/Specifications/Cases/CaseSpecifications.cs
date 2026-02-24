@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,19 @@ namespace Services.Specifications.Cases
     public class CaseSpecifications : BaseSpecifications<int, Case>
     {
         // Get all cases for a specific lawyer Without includes
-        public CaseSpecifications(string lawyerId) : base()
+        public CaseSpecifications(string lawyerId, CaseStatus? status, bool addedWithinMonth) : base()
         {
-            ApplyFilterationToGetAllCaseForSpecificLawyer(lawyerId);
+            ApplyFilterationToGetAllCaseForSpecificLawyer(lawyerId, status, addedWithinMonth);
         }
 
 
         // Get all cases for a specific lawyer Without includes
-        private void ApplyFilterationToGetAllCaseForSpecificLawyer(string lawyerId)
+        private void ApplyFilterationToGetAllCaseForSpecificLawyer(string lawyerId, CaseStatus? status, bool addedWithinMonth)
         {
-            Criteria = C => C.Lawyers.Any(L => L.Id == lawyerId);
+            Criteria = C => 
+                            (C.Lawyers.Any(L => L.Id == lawyerId)) &&
+                            (!status.HasValue || C.Status == status.Value) &&
+                            (!addedWithinMonth || C.CreatedAt >= DateTime.Now.AddMonths(-1)); 
         }
 
 

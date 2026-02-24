@@ -17,7 +17,7 @@ namespace Presentation.Controllers.Lawyers
     [Route("api/[controller]")]
     public class LawyersController(IServiceManager _serviceManager) : ControllerBase
     {
-        
+
         [HttpGet("GetLawyerInfo")] // GET: api/lawyers/GetLawyerInfo
         [Authorize]
         public async Task<IActionResult> GetLawyerInfo()
@@ -28,7 +28,7 @@ namespace Presentation.Controllers.Lawyers
         }
 
 
-        
+
         [HttpPut("UpdateInfo")] // PUT: api/lawyers/UpdateInfo
         [Authorize]
         public async Task<IActionResult> UpdateInfo([FromBody] LawyerUpdateRequest lawyerUpdateRequest)
@@ -39,7 +39,7 @@ namespace Presentation.Controllers.Lawyers
         }
 
 
-        
+
         [HttpPut("UpdateProfilePicture")] // PUT: api/lawyers/UpdateProfilePicture
         [Authorize]
         public async Task<IActionResult> UpdateProfilePicture([FromForm] LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest)
@@ -48,6 +48,27 @@ namespace Presentation.Controllers.Lawyers
             await _serviceManager.LawyerService.UpdateProfilePicture(lawyerId, lawyerUpdateProfilePictureRequest);
             return Ok("Profile picture updated successfully.");
         }
+
+
+
+        [HttpGet("MyDashboard")] // GET: api/lawyers/MyDashboard
+        [Authorize]
+        public async Task<IActionResult> MyDashboard()
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var dashboardResponse = await _serviceManager.LawyerService.MyDashboardAsync(lawyerId);
+            return Ok(dashboardResponse);
+        }
+
+
+
+        //public async Task<IActionResult> GetDecisionsWithAppealDeadlineThisWeek()
+        //{
+        //    var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var decisionResponse
+        //}
+
+
 
     }
 }

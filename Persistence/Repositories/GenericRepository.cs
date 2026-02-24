@@ -5,6 +5,7 @@ using Persistence.Data.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,10 +13,6 @@ namespace Persistence.Repositories
 {
     public class GenericRepository<TKey, TEntity> (AppDbContext _appDbContext) : IGenericRepository<TKey, TEntity> where TEntity : class
     {
-        public async Task<TEntity?> GetByIdAsync(IBaseSpecifications<TKey, TEntity> specifications)
-        {
-            return await ApplySpecifications(specifications).FirstOrDefaultAsync();
-        }
 
         public async Task Add(TEntity entity)
         {
@@ -32,6 +29,11 @@ namespace Persistence.Repositories
             _appDbContext.Set<TEntity>().Remove(entity);
         }
 
+        public async Task<TEntity?> GetByIdAsync(IBaseSpecifications<TKey, TEntity> specifications)
+        {
+            return await ApplySpecifications(specifications).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync(IBaseSpecifications<TKey, TEntity> specifications)
         {
             return await ApplySpecifications(specifications).ToListAsync();
@@ -40,6 +42,11 @@ namespace Persistence.Repositories
         private IQueryable<TEntity> ApplySpecifications(IBaseSpecifications<TKey, TEntity> specifications)
         {
             return SpecificationsEvaluator.GenerateQuery(_appDbContext.Set<TEntity>(), specifications);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _appDbContext.Set<TEntity>().CountAsync(expression);
         }
 
     }

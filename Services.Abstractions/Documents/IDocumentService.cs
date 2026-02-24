@@ -10,6 +10,8 @@ namespace Services.Abstractions.Documents
 {
     public interface IDocumentService
     {
-        public Task UploadDocumentAsync(int caseId, string lawyerId, UploadDocumentRequest uploadDocumentRequest);
+        Task UploadDocumentAsync(int caseId, string lawyerId, UploadDocumentRequest uploadDocumentRequest);
+        Task<IEnumerable<DocumentResponse>> GetAllDocumentsAsync(int caseId, string lawyerId);
+        Task DeleteDocumentAsync(int documentId, string lawyerId);
     }
 }

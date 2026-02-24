@@ -24,9 +24,13 @@ namespace Domain.Entities
         public CourtSession CourtSession { get; set; } // العلاقة مع جلسة المحكمة
 
 
+        public List<Appeal> Appeals { get; set; }
+
+
         // For Performance: Direct FK to Case
         public int CaseId { get; set; }
         public Case Case { get; set; } // العلاقة مع القضية
+
 
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }

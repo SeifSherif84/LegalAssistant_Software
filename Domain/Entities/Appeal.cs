@@ -10,7 +10,7 @@ namespace Domain.Entities
 {
     public class Appeal : BaseEntity<int> , ISoftDelete
     {
-        public DateTime AppealDate { get; set; } // تاريخ الاستئناف
+        public DateTime? AppealDate { get; set; } // تاريخ الاستئناف
         public AppealType AppealType { get; set; } // نوع الاستئناف (مثلاً: استئناف أولي، استئناف نهائي)
         public AppealStatus Status { get; set; } // حالة الاستئناف (معلق، مقبول، مرفوض)
         public string Reason { get; set; } // سبب الاستئناف
@@ -30,9 +30,11 @@ namespace Domain.Entities
         public int? AppealingPartyId { get; set; }
         public CaseParty? AppealingParty { get; set; }
 
+
         // 2. من المحامي الذي تولى إجراءات الاستئناف؟
         public string? LawyerId { get; set; }
         public Lawyer? Lawyer { get; set; }
+
 
         // 3. جهة الاستئناف (نيابة أم دفاع) - مهم جداً للـ AI Assistant
         public AppellantSide AppellantSide { get; set; }
@@ -42,9 +44,8 @@ namespace Domain.Entities
         public int CaseId { get; set; }
         public Case Case { get; set; } // العلاقة مع القضية
 
+
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
-
-
     }
 }

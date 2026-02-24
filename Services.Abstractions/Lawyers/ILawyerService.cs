@@ -13,5 +13,6 @@ namespace Services.Abstractions.Lawyers
         Task<LawyerResponse> GetLawyerInfo(string lawyerId);
         Task Update(string lawyerId, LawyerUpdateRequest lawyerUpdateRequest);
         Task UpdateProfilePicture(string lawyerId, LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest);
+        Task<DashboardResponse> MyDashboardAsync(string lawyerId);
     }
 }

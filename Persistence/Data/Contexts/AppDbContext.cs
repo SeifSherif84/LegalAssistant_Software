@@ -83,26 +83,45 @@ namespace Persistence.Data.Contexts
         }
 
 
+        //private async Task CascadeSoftDelete(EntityEntry entry)
+        //{
+        //    foreach(var navigationalProperty in entry.Navigations)
+        //    {
+        //        if(!navigationalProperty.IsLoaded)
+        //            await navigationalProperty.LoadAsync();
+
+        //        if(navigationalProperty is CollectionEntry collectionEntry &&
+        //           navigationalProperty.CurrentValue is not null)
+        //        {
+        //            foreach(var dependentEntity in collectionEntry.CurrentValue)
+        //            {
+        //                await ApplySoftDelete(dependentEntity);
+        //            }
+        //        }
+
+        //        if(navigationalProperty is ReferenceEntry referenceEntry &&
+        //            navigationalProperty.CurrentValue is not null)
+        //        {
+        //            await ApplySoftDelete(referenceEntry.CurrentValue);
+        //        }
+        //    }
+        //}
+
+
+
         private async Task CascadeSoftDelete(EntityEntry entry)
         {
-            foreach(var navigationalProperty in entry.Navigations)
+            foreach (var navigationalPropertyCollection in entry.Collections)
             {
-                if(!navigationalProperty.IsLoaded)
-                    await navigationalProperty.LoadAsync();
+                if (!navigationalPropertyCollection.IsLoaded)
+                    await navigationalPropertyCollection.LoadAsync();
 
-                if(navigationalProperty is CollectionEntry collectionEntry &&
-                   navigationalProperty.CurrentValue is not null)
+                if (navigationalPropertyCollection.CurrentValue is not null)
                 {
-                    foreach(var dependentEntity in collectionEntry.CurrentValue)
+                    foreach (var dependentEntity in navigationalPropertyCollection.CurrentValue)
                     {
                         await ApplySoftDelete(dependentEntity);
                     }
-                }
-                
-                if(navigationalProperty is ReferenceEntry referenceEntry &&
-                    navigationalProperty.CurrentValue is not null)
-                {
-                    await ApplySoftDelete(referenceEntry.CurrentValue);
                 }
             }
         }

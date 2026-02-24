@@ -34,7 +34,6 @@ namespace Web.Middleware
             }
             catch(Exception exception)
             {
-
                 context.Response.StatusCode = exception switch
                 {
                     NotFoundException => StatusCodes.Status404NotFound,

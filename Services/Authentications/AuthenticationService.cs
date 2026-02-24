@@ -159,5 +159,6 @@ namespace Services.Authentications
             if (!result.Succeeded)
                 throw new ServerErrorExceptionList(result.Errors.Select(E => E.Description).ToList());
         }
+
     }
 }

@@ -15,6 +15,14 @@ namespace Services.Mapping.CourtSessions
         {
             CreateMap<CreateCourtSession, CourtSession>();
             CreateMap<CourtSession, CourtSessionResponse>();
+            CreateMap<UpdateCourtSession, CourtSession>();
+            CreateMap<CourtSession, CourtSessionResponseDashboard>()
+                .ForMember(Destination => Destination.caseTitle,
+                           Config => Config.MapFrom(Source => Source.Case.Title))
+                .ForMember(Destination => Destination.caseFileNumber,
+                           Config => Config.MapFrom(Source => Source.Case.FileNumber))
+                .ForMember(Destination => Destination.caseStatus,
+                           Config => Config.MapFrom(Source => Source.Case.Status));
         }
     }
 }

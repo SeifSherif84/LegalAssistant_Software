@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Entities.Enums;
 using Domain.Exceptions.BadRequest;
 using Domain.Exceptions.NotFound;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions.Cases;
 using Services.Specifications.Cases;
 using Services.Specifications.Lawyers;
@@ -24,7 +25,7 @@ namespace Services.Cases
             // 1. Check LawyerId
             if (string.IsNullOrEmpty(LawyerId))
                 throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
-            var specifications = new LawyerSpecifications(LawyerId);
+            var specifications = new LawyerSpecifications(LawyerId,true);
             var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(specifications);
             if (lawyer is null)
                 throw new LawyerNotFoundException("Lawyer not found.");
@@ -32,7 +33,7 @@ namespace Services.Cases
             var newCase = _mapper.Map<Case>(createCaseRequest);
             newCase.CreatedAt = DateTime.UtcNow;
             newCase.UpdatedAt = DateTime.UtcNow;
-            newCase.Status = CaseStatus.Open;
+            newCase.Status = CaseStatus.Active;
 
             if (lawyer.Cases is null)
                 lawyer.Cases = new List<Case>();
@@ -45,17 +46,17 @@ namespace Services.Cases
         }
 
 
-        public async Task<IEnumerable<CaseResponse>> GetAllCasesAsync(string LawyerId)
+        public async Task<IEnumerable<CaseResponse>> GetAllCasesAsync(string LawyerId, CaseStatus? Status, bool addedWithinMonth = false)
         {
             // 1. Check LawyerId
             if (string.IsNullOrEmpty(LawyerId))
                 throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
 
-            var lawyerSpecifications = new LawyerSpecifications(LawyerId);
+            var lawyerSpecifications = new LawyerSpecifications(LawyerId,false);
             var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(lawyerSpecifications);
             if (lawyer is null)
                 throw new LawyerNotFoundException("Lawyer not found.");
-            var caseSpecifications = new CaseSpecifications(LawyerId);
+            var caseSpecifications = new CaseSpecifications(LawyerId, Status, addedWithinMonth);
             var cases = await _unitOfWork.GetRepository<int, Case>().GetAllAsync(caseSpecifications);
             return _mapper.Map<IEnumerable<CaseResponse>>(cases);
         }
@@ -67,7 +68,7 @@ namespace Services.Cases
             if (string.IsNullOrEmpty(LawyerId))
                 throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
 
-            var lawyerSpecifications = new LawyerSpecifications(LawyerId);
+            var lawyerSpecifications = new LawyerSpecifications(LawyerId,false);
             var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(lawyerSpecifications);
             if (lawyer is null)
                 throw new LawyerNotFoundException("Lawyer not found.");
@@ -94,7 +95,7 @@ namespace Services.Cases
                 _unitOfWork.GetRepository<int, Case>().Update(caseEntity);
                 int result = await _unitOfWork.SaveChangesAsync();
                 if (result <= 0)
-                    throw new CaseUpdateFailedException("Failed to update case. Please try again later.");
+                    throw new CaseUpdatedFailedException("Failed to update case. Please try again later.");
             }
             else
                 throw new UnauthorizedAccessException("You don't have permission to update this case.");
@@ -134,9 +135,31 @@ namespace Services.Cases
         }
 
 
+        public async Task<CaseResponse> GetCaseByIdAsync(int caseId, string LawyerId)
+        {
+            // 2. Check LawyerId
+            if (string.IsNullOrEmpty(LawyerId))
+                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
 
+            // 1. Check CaseId Existence
+            var caseSpecifications = new CaseSpecifications(caseId, false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    true,
+                                                                    false);
 
+            var caseEntity = await _unitOfWork.GetRepository<int, Case>().GetByIdAsync(caseSpecifications);
+            if (caseEntity is null)
+                throw new CaseNotFoundException($"Case with id : {caseId} not found.");
 
+            // 3. Check if the case belongs to this lawyer
+            if (caseEntity.Lawyers.Any(L => L.Id == LawyerId))
+                return _mapper.Map<CaseResponse>(caseEntity);
+            else
+                throw new UnauthorizedAccessException("You don't have permission to display this case.");
 
+        }
     }
 }

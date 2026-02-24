@@ -17,7 +17,7 @@ namespace Store.G02.Persistence
 
         public IGenericRepository<TKey, TEntity> GetRepository<TKey, TEntity>() where TEntity : class
         {
-            return (IGenericRepository<TKey, TEntity>)_repositories.GetOrAdd(typeof(TEntity).Name, new GenericRepository<TKey, TEntity>(_appDbContext));
+            return (IGenericRepository<TKey, TEntity>) _repositories.GetOrAdd(typeof(TEntity).Name, new GenericRepository<TKey, TEntity>(_appDbContext));
         }
 
         public async Task<int> SaveChangesAsync()

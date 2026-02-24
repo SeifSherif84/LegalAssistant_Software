@@ -9,6 +9,7 @@ namespace Shared.Dtos.CourtSessions
 {
     public class CourtSessionResponse
     {
+        public int Id { get; set; }
         public DateTime SessionDate { get; set; }
         public DateTime? ReminderDate { get; set; }
 
