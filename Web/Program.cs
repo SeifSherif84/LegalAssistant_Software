@@ -19,6 +19,7 @@ using Services.Mapping.Cases;
 using Services.Mapping.Documents;
 using Microsoft.AspNetCore.Mvc;
 using Services.Mapping.CourtSessions;
+using Services.Mapping.ChatBot;
 
 namespace Web
 {
@@ -80,6 +81,7 @@ namespace Web
                 Config.AddProfile(new CaseProfile());
                 Config.AddProfile(new DocumentProfile(builder.Configuration));
                 Config.AddProfile(new CourtSessionProfile());
+                Config.AddProfile(new ChatBotProfile());
             });
 
 
@@ -113,6 +115,31 @@ namespace Web
             builder.Services.Configure<MailKitSetting>(builder.Configuration.GetSection(nameof(MailKitSetting)));
             builder.Services.AddScoped<IMailService, MailService>();
 
+
+            #region Old
+            //builder.Services.AddHttpClient("RAGModelServiceClient", client =>
+            //{
+            //    var aiSettings = builder.Configuration.GetSection("AiSettings");
+            //    client.BaseAddress = new Uri(aiSettings["BaseUrl"]);
+            //    client.Timeout = TimeSpan.FromSeconds(double.Parse(aiSettings["TimeoutInSeconds"]));
+            //}); 
+            #endregion
+
+
+            builder.Services.AddHttpClient("RAGModelServiceClient", client =>
+            {
+                var aiSettings = builder.Configuration.GetSection("AiSettings");
+                client.BaseAddress = new Uri(aiSettings["BaseUrl"] ?? throw new InvalidOperationException("BaseUrl is missing"));
+                client.Timeout = TimeSpan.FromSeconds(double.Parse(aiSettings["TimeoutInSeconds"] ?? "120"));
+            });
+
+            builder.Services.AddControllers().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                o.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+            });
+
+
             var app = builder.Build();
 
             app.UseCors("CorsPolicy");
@@ -128,7 +155,6 @@ namespace Web
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
 
             app.UseStaticFiles();
 

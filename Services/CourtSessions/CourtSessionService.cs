@@ -9,6 +9,7 @@ using Services.Specifications.Cases;
 using Services.Specifications.CourtSessions;
 using Shared.Dtos.Cases;
 using Shared.Dtos.CourtSessions;
+using Shared.Dtos.Dashboard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace Services.CourtSessions
                 await _unitOfWork.GetRepository<int, CourtSession>().Add(newCourtSession);
                 var result = await _unitOfWork.SaveChangesAsync();
                 if (result <= 0)
-                    throw new CaseUpdatedFailedException("Failed to Add Session. Please try again later.");
+                    throw new SessionUpdatedFailedException("Failed to Add Session. Please try again later.");
             }
             else
                 throw new UnauthorizedAccessException("You don't have permission to Add Session To this case.");
@@ -169,7 +170,7 @@ namespace Services.CourtSessions
 
 
 
-        public async Task<IEnumerable<CourtSessionResponseDashboard>> GetLawyerSessionsAsync(string lawyerId, string period)
+        public async Task<IEnumerable<CourtSessionResponseForDashboard>> GetLawyerSessionsAsync(string lawyerId, string period)
         {
             // 1. Check LawyerId
             if (string.IsNullOrEmpty(lawyerId))
@@ -181,7 +182,7 @@ namespace Services.CourtSessions
             if (period.ToLower() == "today")
             {
                 startDate = DateTime.Now.Date;
-                endDate = DateTime.Now.Date.AddDays(1).AddTicks(-1);
+                endDate = DateTime.Now.Date.AddDays(1);
             }
             else if (period.ToLower() == "week")
             {
@@ -194,7 +195,7 @@ namespace Services.CourtSessions
             if (sessions is null || !sessions.Any())
                 throw new SessionNotFoundException("No sessions found for the specified period.");
 
-            return _mapper.Map<IEnumerable<CourtSessionResponseDashboard>>(sessions);
+            return _mapper.Map<IEnumerable<CourtSessionResponseForDashboard>>(sessions);
         }
 
     }

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Dtos.CourtSessions
+namespace Shared.Dtos.Dashboard
 {
-    public class CourtSessionResponseDashboard
+    public class CourtSessionResponseForDashboard
     {
         public DateTime SessionDate { get; set; }
         public string CourtName { get; set; }
@@ -17,12 +17,6 @@ namespace Shared.Dtos.CourtSessions
 
         public SessionType SessionType { get; set; }
         public SessionStatus SessionStatus { get; set; }
-
-        public string? AdjournmentReason { get; set; }
-        public string? CancelledReason { get; set; }
-
-        public string? Notes { get; set; }
-
 
         public string caseTitle { get; set; }
         public string caseFileNumber { get; set; }

@@ -34,7 +34,6 @@ namespace Presentation.Controllers.CourtSessions
 
 
 
-
         [HttpPost("AddSession/Case/{caseId}")] // POST: api/CourtSessions/AddSession/Case/{caseId}
         [Authorize]
         public async Task<IActionResult> AddSession([FromRoute] int caseId, [FromBody] CreateCourtSession createCourtSession)
@@ -57,7 +56,9 @@ namespace Presentation.Controllers.CourtSessions
         }
 
 
-        // Get All Sessions For All Cases Which Related To Specific Lawyer
+
+        // For Dashboard
+        // Get All Sessions For All Cases Which Related To Specific Lawyer 
         [HttpGet("GetLawyerSessions")]
         [Authorize]
         public async Task<IActionResult> GetLawyerSessions([FromQuery] string period = "all")

@@ -16,11 +16,9 @@ namespace Services.Specifications.Lawyers
             ApplyFilteration(lawyerId);
             ApplyIncludes(includeCases);
 
-
             #region old Dashboard
             //ApplyIncludes(includeCasesWithSessionsWithDecisionsWithAppeals);  
             #endregion
-
         }
 
         private void ApplyFilteration(string lawyerId)
@@ -33,7 +31,6 @@ namespace Services.Specifications.Lawyers
             if (includeCases)
                 Includes.Add(L => L.Cases);
         }
-
 
         #region old Dashboard
         //private void ApplyIncludes(bool includeCasesWithSessionsWithDecisions)

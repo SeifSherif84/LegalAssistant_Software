@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Data.Configurations
 {
-    public class LowerConfigurations : IEntityTypeConfiguration<Lawyer>
+    public class LaywerConfigurations : IEntityTypeConfiguration<Lawyer>
     {
         public void Configure(EntityTypeBuilder<Lawyer> builder)
         {

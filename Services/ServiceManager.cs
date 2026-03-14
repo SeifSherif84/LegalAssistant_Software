@@ -4,15 +4,18 @@ using Domain.Contracts;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services.Abstractions;
 using Services.Abstractions.Authentications;
 using Services.Abstractions.Cases;
+using Services.Abstractions.ChatBot;
 using Services.Abstractions.CourtSessions;
 using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
 using Services.Authentications;
 using Services.Cases;
+using Services.ChatBot;
 using Services.CourtSessions;
 using Services.Documents;
 using Services.Lawyers;
@@ -30,12 +33,15 @@ namespace Services
                                 IMapper _mapper,
                                 IMailService _mailService,
                                 IUnitOfWork _unitOfWork,
-                                IConfiguration _configuration) : IServiceManager
+                                IConfiguration _configuration,
+                                IHttpClientFactory _httpClientFactory,
+                                ILogger<ChatBotService> _logger) : IServiceManager
     {
         public IAuthenticationService AuthenticationService { get; } = new AuthenticationService(_userManager, _JWTOptions, _mapper, _mailService, _configuration);
         public ILawyerService LawyerService => new LawyerService(_unitOfWork, _mapper);
         public ICaseService CaseService => new CaseService(_mapper, _unitOfWork);
         public IDocumentService DocumentService => new DocumentService(_mapper, _unitOfWork);
         public ICourtSessionService CourtSessionService => new CourtSessionService(_mapper, _unitOfWork);
+        public IChatBotService ChatBotService => new ChatBotService(_unitOfWork, _mapper, _httpClientFactory, _logger);
     }
 }

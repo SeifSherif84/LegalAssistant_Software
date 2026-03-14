@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Shared.Dtos.CourtSessions;
+using Shared.Dtos.Dashboard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Services.Mapping.CourtSessions
             CreateMap<CreateCourtSession, CourtSession>();
             CreateMap<CourtSession, CourtSessionResponse>();
             CreateMap<UpdateCourtSession, CourtSession>();
-            CreateMap<CourtSession, CourtSessionResponseDashboard>()
+            CreateMap<CourtSession, CourtSessionResponseForDashboard>()
                 .ForMember(Destination => Destination.caseTitle,
                            Config => Config.MapFrom(Source => Source.Case.Title))
                 .ForMember(Destination => Destination.caseFileNumber,

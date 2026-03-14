@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data.Contexts;
+using Shared.Dtos.Dashboard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,7 @@ namespace Persistence.Repositories
         {
             return await _appDbContext.Set<TEntity>().CountAsync(expression);
         }
+
 
     }
 }

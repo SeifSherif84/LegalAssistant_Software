@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Dtos.Lawyers
+namespace Shared.Dtos.Dashboard
 {
     public class DashboardResponse
     {
@@ -16,7 +16,7 @@ namespace Shared.Dtos.Lawyers
         public int DecisionsWithAppealDeadlineThisWeek { get; set; } // عدد الأحكام التي لها موعد نهائي للاستئناف هذا الأسبوع
         public int TodaysSessionsCount { get; set; } // عدد الجلسات اليوم
         public int LastCasesAddedCountPerMonth { get; set; } // عدد القضايا الجديدة التي تم إضافتها في الشهر
-        public int UnderReviewedAppealsCount { get; set; } // عدد الاستئنافات المعلقة
+        // public int UnderReviewedAppealsCount { get; set; } // عدد الاستئنافات المعلقة
  
     }
 }

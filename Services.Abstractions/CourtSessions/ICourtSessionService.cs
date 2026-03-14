@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Shared.Dtos.CourtSessions;
+using Shared.Dtos.Dashboard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace Services.Abstractions.CourtSessions
         Task DeleteSessionAsync(int sessionId, string lawyerId);
         Task UpdateSessionAsync(int sessionId, string lawyerId, UpdateCourtSession updateCourtSession);
         Task<CourtSessionResponse> GetSessionByIdAsync(int sessionId, string lawyerId);
-        Task<IEnumerable<CourtSessionResponseDashboard>> GetLawyerSessionsAsync(string lawyerId, string period);
+        Task<IEnumerable<CourtSessionResponseForDashboard>> GetLawyerSessionsAsync(string lawyerId, string period);
     }
 }

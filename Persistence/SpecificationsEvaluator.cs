@@ -21,8 +21,14 @@ namespace Persistence
             if (specifications.Criteria is not null)
                 generatedQuery = generatedQuery.Where(specifications.Criteria); // _context.Set<TEntity>().Where(specifications.Criteria);
 
+            if (specifications.OrderByDescending != null)
+                generatedQuery = generatedQuery.OrderByDescending(specifications.OrderByDescending);
+
             if (specifications.Includes.Count > 0)
                 generatedQuery = specifications.Includes.Aggregate(generatedQuery, (currentQuery, includeExpression) => currentQuery.Include(includeExpression)); // _context.Set<TEntity>().Include(includeExpression);
+
+            if (specifications.IsPaginationEnabled)
+                generatedQuery = generatedQuery.Take(specifications.Take);
 
             return generatedQuery;
         }

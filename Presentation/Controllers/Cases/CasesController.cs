@@ -104,7 +104,7 @@ namespace Presentation.Controllers.Cases
 
 
 
-        // [HttpPut("UpdateCase")] // PUT: api/Cases/UpdateCase?caseId={caseId} // [FromQuery]
+        // [HttpPut("UpdateCase")] // PUT: api/Cases/UpdateCase?caseId=1 // [FromQuery]
         [HttpPut("UpdateCase/{caseId}")] // PUT: api/Cases/UpdateCase/{caseId} // [FromRoute]
         [Authorize] 
         public async Task<IActionResult> UpdateCase([FromRoute] int caseId, [FromBody] UpdateCaseRequest updateCaseRequest)

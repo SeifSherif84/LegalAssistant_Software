@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+// Done
 
 namespace Presentation.Controllers.Lawyers
 {
@@ -17,13 +18,12 @@ namespace Presentation.Controllers.Lawyers
     [Route("api/[controller]")]
     public class LawyersController(IServiceManager _serviceManager) : ControllerBase
     {
-
         [HttpGet("GetLawyerInfo")] // GET: api/lawyers/GetLawyerInfo
         [Authorize]
         public async Task<IActionResult> GetLawyerInfo()
         {
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var lawyerResponse = await _serviceManager.LawyerService.GetLawyerInfo(lawyerId);
+            var lawyerResponse = await _serviceManager.LawyerService.GetLawyerInfoAsync(lawyerId);
             return Ok(lawyerResponse);
         }
 
@@ -34,7 +34,7 @@ namespace Presentation.Controllers.Lawyers
         public async Task<IActionResult> UpdateInfo([FromBody] LawyerUpdateRequest lawyerUpdateRequest)
         {
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _serviceManager.LawyerService.Update(lawyerId, lawyerUpdateRequest);
+            await _serviceManager.LawyerService.UpdateAsync(lawyerId, lawyerUpdateRequest);
             return Ok("Lawyer info updated successfully.");
         }
 
@@ -45,7 +45,7 @@ namespace Presentation.Controllers.Lawyers
         public async Task<IActionResult> UpdateProfilePicture([FromForm] LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest)
         {
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _serviceManager.LawyerService.UpdateProfilePicture(lawyerId, lawyerUpdateProfilePictureRequest);
+            await _serviceManager.LawyerService.UpdateProfilePictureAsync(lawyerId, lawyerUpdateProfilePictureRequest);
             return Ok("Profile picture updated successfully.");
         }
 
@@ -62,13 +62,14 @@ namespace Presentation.Controllers.Lawyers
 
 
 
-        //public async Task<IActionResult> GetDecisionsWithAppealDeadlineThisWeek()
-        //{
-        //    var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var decisionResponse
-        //}
-
-
-
+        [HttpGet("DecisionsWithAppealDeadlineThisWeek")]
+        [Authorize]
+        public async Task<IActionResult> GetDecisionsWithAppealDeadlineThisWeek()
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var decisionsResponse = await _serviceManager.LawyerService.GetDecisionsWithAppealDeadlineThisWeekAsync(lawyerId);
+            return Ok(decisionsResponse);
+        }
+       
     }
 }

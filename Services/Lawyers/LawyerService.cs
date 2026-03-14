@@ -7,38 +7,72 @@ using Domain.Exceptions.NotFound;
 using Domain.Exceptions.ServerError;
 using Services.Abstractions.Lawyers;
 using Services.Helper;
+using Services.Specifications;
+using Services.Specifications.Cases;
 using Services.Specifications.Lawyers;
+using Shared.Dtos.Dashboard;
 using Shared.Dtos.Lawyers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+// Done
 
 namespace Services.Lawyers
 {
     public class LawyerService(IUnitOfWork _unitOfWork,
                                IMapper _mapper) : ILawyerService
     {
-        public async Task<LawyerResponse?> GetLawyerInfo(string lawyerId)
+        public async Task<LawyerResponse?> GetLawyerInfoAsync(string lawyerId)
         {
-            // 1. Check LawyerId
-            if (string.IsNullOrEmpty(lawyerId))
-                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
-
-            var specifications = new LawyerSpecifications(lawyerId,false);
-            var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(specifications);
-            if (lawyer is null)
-                throw new LawyerNotFoundException("Lawyer not found");
+            CheckLawyerIdentifierExistance(lawyerId);
+            var lawyer = await CheckLawyerExistanceToReturnAsync(lawyerId);
             return _mapper.Map<LawyerResponse>(lawyer);             
         }
 
 
+
+        #region Note
+        // lawyer = _mapper.Map<Lawyer>(lawyerUpdateRequest); // Wrong mapping, should map to existing lawyer entity instead of creating a new one  
+        #endregion
+        public async Task UpdateAsync(string lawyerId, LawyerUpdateRequest lawyerUpdateRequest)
+        {
+            CheckLawyerIdentifierExistance(lawyerId);
+            var lawyer = await CheckLawyerExistanceToReturnAsync(lawyerId);
+            _mapper.Map(lawyerUpdateRequest, lawyer); // Correct mapping to update existing entity which tracked by EF Core. Remain other properties Which Not Exist In UpdateRequest Not Be Overwritten Stay The Same As In DB
+            _unitOfWork.GetRepository<string, Lawyer>().Update(lawyer); // Optinal
+            int result = await _unitOfWork.SaveChangesAsync();
+            if (result <= 0)
+                throw new ServerErrorExceptionText("Failed to update lawyer info. Please try again later.");
+        }
+
+
+
+        public async Task UpdateProfilePictureAsync(string lawyerId, LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest)
+        {
+            CheckLawyerIdentifierExistance(lawyerId);
+            var lawyer = await CheckLawyerExistanceToReturnAsync(lawyerId);
+
+            if (lawyerUpdateProfilePictureRequest.ProfilePicture is not null && lawyer.ProfilePictureUrl is not null) // Mean A File Is Uploaded And There Is An Old Picture To Delete
+                LawyerImageHelper.DeleteProfilePicture(lawyer.ProfilePictureUrl, "lawyerprofile");
+
+            if (lawyerUpdateProfilePictureRequest.ProfilePicture is not null) // Mean A File Is Uploaded
+                lawyerUpdateProfilePictureRequest.ProfilePictureUrl = LawyerImageHelper.UploadProfilePicture(lawyerUpdateProfilePictureRequest.ProfilePicture, "lawyerprofile");
+
+            _mapper.Map(lawyerUpdateProfilePictureRequest, lawyer);
+
+            _unitOfWork.GetRepository<string, Lawyer>().Update(lawyer); // Optinal
+            int result = await _unitOfWork.SaveChangesAsync();
+            if (result <= 0)
+                throw new ServerErrorExceptionText("Failed to update profile picture. Please try again later.");
+        }
+
+
+
         public async Task<DashboardResponse> MyDashboardAsync(string lawyerId)
         {
-            // 1. Check LawyerId
-            if (string.IsNullOrEmpty(lawyerId))
-                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
+            CheckLawyerIdentifierExistance(lawyerId);
 
             var caseRepo = _unitOfWork.GetRepository<int, Case>();
             var sessionRepo = _unitOfWork.GetRepository<int, CourtSession>();
@@ -52,6 +86,10 @@ namespace Services.Lawyers
 
             var MyDashboard = new DashboardResponse()
             {
+
+                // We Build Queries On DataBase Direct Using Repository Without Download Data From DB To Memory As Include And Check On This Data Which In Memory
+                // Here We Not Make This Here We Build Query On Database Direct
+
                 // Case --> Lawyers
                 // Check Case If Related To Lawyer Or Not By Checking If Any Lawyer In This Case Has Id Equal To LawyerId, Then Check Status Of This Case To Get Total Active, Closed And OnHold Cases Count
                 TotalActiveCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.Active),
@@ -66,11 +104,55 @@ namespace Services.Lawyers
 
                 // Decision --> Session --> Case --> Lawyers
                 DecisionsWithAppealDeadlineThisWeek = await decisionRepo.CountAsync(D => D.CourtSession.Case.Lawyers.Any(L => L.Id == lawyerId) && D.AppealDeadline >= today && D.AppealDeadline <= nextWeek),
+
                 // Appeal --> Decision --> Session --> Case --> Lawyers
-                UnderReviewedAppealsCount = await appealRepo.CountAsync(A => A.OriginalDecision.CourtSession.Case.Lawyers.Any(L => L.Id == lawyerId) && A.Status == AppealStatus.UnderReview && A.Outcome == AppealOutcome.Pending)
+                //UnderReviewedAppealsCount = await appealRepo.CountAsync(A => A.OriginalDecision.CourtSession.Case.Lawyers.Any(L => L.Id == lawyerId) && A.Status == AppealStatus.UnderReview && A.Outcome == AppealOutcome.Pending)
             };
             return MyDashboard;
         }
+
+
+
+        // Need Modify In Feature
+        public async Task<IEnumerable<DecisionResponseForDashboard>> GetDecisionsWithAppealDeadlineThisWeekAsync(string lawyerId)
+        {
+            CheckLawyerIdentifierExistance(lawyerId);
+
+            var today = DateTime.Now.Date;
+            var nextWeek = today.AddDays(7);
+
+            var decisionSpecifications = new DecisionSpecificationsDashboard(lawyerId, today, nextWeek, true, true);
+            var decisions = await _unitOfWork.GetRepository<int, Decision>().GetAllAsync(decisionSpecifications);
+            return _mapper.Map<IEnumerable<DecisionResponseForDashboard>>(decisions);
+        }
+
+
+
+
+
+        #region Helper_Methods
+        private void CheckLawyerIdentifierExistance(string? lawyerId)
+        {
+            // 1. Check LawyerId
+            if (string.IsNullOrEmpty(lawyerId))
+                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
+        }
+
+        private async Task<Lawyer> CheckLawyerExistanceToReturnAsync(string lawyerId)
+        {
+            var specifications = new LawyerSpecifications(lawyerId, false);
+            var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(specifications);
+            if (lawyer is null)
+                throw new LawyerNotFoundException("Lawyer not found");
+            return lawyer;
+        }
+        #endregion
+
+
+
+
+
+
 
 
 
@@ -188,52 +270,5 @@ namespace Services.Lawyers
         //} 
         #endregion
 
-
-
-        // lawyer = _mapper.Map<Lawyer>(lawyerUpdateRequest); // Wrong mapping, should map to existing lawyer entity instead of creating a new one 
-        public async Task Update(string lawyerId, LawyerUpdateRequest lawyerUpdateRequest)
-        {
-            // 1. Check LawyerId
-            if (string.IsNullOrEmpty(lawyerId))
-                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
-
-            var specifications = new LawyerSpecifications(lawyerId,false);
-            var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(specifications);
-            if (lawyer is null)
-                throw new LawyerNotFoundException("Lawyer not found");
-
-            _mapper.Map(lawyerUpdateRequest, lawyer); // Correct mapping to update existing entity which tracked by EF Core. Remain other properties Which Not Exist In UpdateRequest Not Be Overwritten Stay The Same As In DB
-            _unitOfWork.GetRepository<string, Lawyer>().Update(lawyer);
-            int result = await _unitOfWork.SaveChangesAsync();
-            if (result <= 0)
-                throw new ServerErrorExceptionText("Failed to update lawyer info. Please try again later.");
-        }
-
-
-        public async Task UpdateProfilePicture(string lawyerId, LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest)
-        {
-            // 1. Check LawyerId
-            if (string.IsNullOrEmpty(lawyerId))
-                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
-
-            var specifications = new LawyerSpecifications(lawyerId, false);
-            var lawyer = await _unitOfWork.GetRepository<string, Lawyer>().GetByIdAsync(specifications);
-
-            if (lawyer is null)
-                throw new LawyerNotFoundException("Lawyer not found");
-
-            if(lawyerUpdateProfilePictureRequest.ProfilePicture is not null && lawyer.ProfilePictureUrl is not null) // Mean A File Is Uploaded And There Is An Old Picture To Delete
-                LawyerImageHelper.DeleteProfilePicture(lawyer.ProfilePictureUrl, "lawyerprofile");
-
-            if (lawyerUpdateProfilePictureRequest.ProfilePicture is not null) // Mean A File Is Uploaded
-                lawyerUpdateProfilePictureRequest.ProfilePictureUrl = LawyerImageHelper.UploadProfilePicture(lawyerUpdateProfilePictureRequest.ProfilePicture, "lawyerprofile");
-
-            _mapper.Map(lawyerUpdateProfilePictureRequest, lawyer);
-
-            _unitOfWork.GetRepository<string, Lawyer>().Update(lawyer);
-            int result = await _unitOfWork.SaveChangesAsync();
-            if (result <= 0)
-                throw new ServerErrorExceptionText("Failed to update profile picture. Please try again later.");
-        }
     }
 }
