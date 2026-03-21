@@ -11,6 +11,7 @@ namespace Domain.Entities
     public class Decision : BaseEntity<int> , ISoftDelete
     {
         public DateTime DecisionDate { get; set; } // تاريخ الحكم
+        public DateTime? NextSessionDate { get; set; } // تاريخ الحكم
         public DecisionType DecisionType { get; set; } // نوع الحكم (مثلاً: حكم ابتدائي، حكم استئنافي)
         public bool Appealable { get; set; } // هل الحكم قابل للاستئناف
         public string SentenceText { get; set; } // نص الحكم
