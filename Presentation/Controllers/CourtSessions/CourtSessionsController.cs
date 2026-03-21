@@ -15,7 +15,7 @@ namespace Presentation.Controllers.CourtSessions
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CourtSessions(IServiceManager _serviceManager) : ControllerBase
+    public class CourtSessionsController(IServiceManager _serviceManager) : ControllerBase
     {
 
         [HttpGet("GetSessionTypes")] // GET: api/CourtSessions/GetSessionTypes

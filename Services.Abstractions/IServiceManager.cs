@@ -2,6 +2,7 @@
 using Services.Abstractions.Cases;
 using Services.Abstractions.ChatBot;
 using Services.Abstractions.CourtSessions;
+using Services.Abstractions.Decisions;
 using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
 using System;
@@ -20,5 +21,6 @@ namespace Services.Abstractions
         IDocumentService DocumentService { get; }
         ICourtSessionService CourtSessionService { get; }
         IChatBotService ChatBotService { get; }
+        IDecisionService DecisionService { get; }
     }
 }

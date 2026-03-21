@@ -17,6 +17,14 @@ namespace Services.Mapping.CourtSessions
             CreateMap<CreateCourtSession, CourtSession>();
             CreateMap<CourtSession, CourtSessionResponse>();
             CreateMap<UpdateCourtSession, CourtSession>();
+            //self mapping to create a new session based on an existing one, while ignoring certain properties that should not be copied
+            CreateMap<CourtSession, CourtSession>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.NextSessionId, opt => opt.Ignore()) 
+                .ForMember(dest => dest.SessionDate, opt => opt.Ignore())
+                .ForMember(dest => dest.SessionStatus, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Decisions, opt => opt.Ignore());
+
             CreateMap<CourtSession, CourtSessionResponseForDashboard>()
                 .ForMember(Destination => Destination.caseTitle,
                            Config => Config.MapFrom(Source => Source.Case.Title))
