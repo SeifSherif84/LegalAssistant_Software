@@ -28,8 +28,8 @@ namespace Shared.Dtos.Decisions
 
         public DateTime? AppealDeadline { get; set; }  // nullable — only required if Appealable = true
 
-        [MaxLength(200)]
-        public string? JudgeName { get; set; }
+        //[MaxLength(200)]
+        //public string? JudgeName { get; set; }
 
         public bool IsFinalVerdict { get; set; }
 

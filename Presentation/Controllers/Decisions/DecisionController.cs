@@ -34,12 +34,12 @@ namespace Presentation.Controllers.Decisions
             return Ok(decision);
         }
 
-        [HttpGet("GetAllDecisions")]
+        [HttpGet("cases/{caseId}/GetAllDecisions")]
         [Authorize]
-        public async Task<IActionResult> GetAllDecisionsAsync([FromQuery] DecisionFilterDto filter)
+        public async Task<IActionResult> GetAllDecisionsAsync(int caseId,[FromQuery] DecisionFilterDto filter)
         {
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var decisions = await _serviceManager.DecisionService.GetAllDecisionsAsync(filter,lawyerId);
+            var decisions = await _serviceManager.DecisionService.GetAllDecisionsAsync(caseId, lawyerId, filter);
             return Ok(decisions);
         }
 
