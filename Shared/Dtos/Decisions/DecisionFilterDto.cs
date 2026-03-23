@@ -9,8 +9,8 @@ namespace Shared.Dtos.Decisions
 {
     public class DecisionFilterDto
     {
-        [Required]
-        public int CaseId { get; set; }
+        //[Required]
+        //public int CaseId { get; set; }
         public int? CourtSessionId { get; set; }
         public bool? IsFinal { get; set; }
     }

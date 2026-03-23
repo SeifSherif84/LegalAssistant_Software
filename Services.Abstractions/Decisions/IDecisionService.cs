@@ -12,7 +12,7 @@ namespace Services.Abstractions.Decisions
         Task<DecisionResponse> CreateDecision(string lawyrId,int sessionId ,DecisionRequest request);
         Task<DecisionResponse> UpdateDecision(int caseId, int decisionId, string lawyerId, DecisionRequest request);
         Task<DecisionResponse> GetDecisionByIdAsync(int caseId, int decisionId, string lawyerId);
-        Task<IEnumerable<DecisionResponse>> GetAllDecisionsAsync(DecisionFilterDto filter, string lawyerId);
+        Task<IEnumerable<DecisionResponse>> GetAllDecisionsAsync(int caseId, string lawyerId, DecisionFilterDto filter);
         Task DeleteDecisionAsync(int caseId, int decisionId, string lawyerId);
     }
 }
