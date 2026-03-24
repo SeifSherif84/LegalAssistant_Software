@@ -61,7 +61,7 @@ namespace Presentation.Controllers.Decisions
             return Ok("Decision deleted successfully.");
         }
 
-        [HttpGet("GetDecisionTypes")] // GET: api/CourtSessions/GetSessionTypes
+        [HttpGet("DecisionTypes")]
         [Authorize]
         public IActionResult GetDecisionTypes()
         {
