@@ -15,6 +15,7 @@ namespace Services.Specifications
         public Expression<Func<TEntity, object>> OrderByDescending { get; set; }
         public bool IsPaginationEnabled { get; set; }
         public int Take { get; set; }
+        public int Skip { get; private set; }
 
 
         public BaseSpecifications()
@@ -22,6 +23,12 @@ namespace Services.Specifications
             Includes = new List<Expression<Func<TEntity, object>>>();
             Criteria = null;
             OrderByDescending = null;
+        }
+        protected void ApplyPaging(int skip, int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPaginationEnabled = true;
         }
     }
 }

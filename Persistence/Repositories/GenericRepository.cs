@@ -50,6 +50,11 @@ namespace Persistence.Repositories
             return await _appDbContext.Set<TEntity>().CountAsync(expression);
         }
 
+        public async Task<bool> AnyAsync(IBaseSpecifications<TKey, TEntity> spec)
+        {
+            return await ApplySpecifications(spec).AnyAsync();
+        }
+
 
     }
 }

@@ -21,6 +21,7 @@ using Services.Mapping.CourtSessions;
 using Services.Mapping.Decisions;
 using Services.Mapping.Documents;
 using Services.Mapping.Lawyers;
+using Services.Mapping.Persons;
 using Shared.Dtos.Authentications;
 using Store.G02.Persistence;
 using System.Text;
@@ -123,6 +124,7 @@ namespace Web
                 Config.AddProfile(new CourtSessionProfile());
                 Config.AddProfile(new ChatBotProfile());
                 Config.AddProfile(new DecisionProfile());
+                Config.AddProfile(new PersonProfile());
             });
 
 
