@@ -5,6 +5,7 @@ using Services.Abstractions.CourtSessions;
 using Services.Abstractions.Decisions;
 using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
+using Services.Abstractions.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,6 @@ namespace Services.Abstractions
         ICourtSessionService CourtSessionService { get; }
         IChatBotService ChatBotService { get; }
         IDecisionService DecisionService { get; }
+        IPersonService PersonService { get; }
     }
 }
