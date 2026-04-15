@@ -1,4 +1,5 @@
-﻿using Shared.Dtos.Persons;
+﻿using Domain.Entities;
+using Shared.Dtos.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace Services.Abstractions.Persons
 {
     public interface IPersonService
     {
-        Task<PersonResponce> CreatePerson(PersonRequest personRequest);
-        Task<PersonResponce> UpdatePerson(int personId, PersonRequest personRequest);
-        Task<PersonResponce> GetPersonByIdAsync(int personId);
-        Task<IEnumerable<PersonResponce>> GetAllPersonsAsync(PersonFilterDto filter);
+        Task<PersonResponse> CreatePerson(PersonRequest personRequest);
+        Task<PersonResponse> UpdatePerson(int personId, PersonRequest personRequest);
+        Task<PersonResponse> GetPersonByIdAsync(int personId);
+        Task<Person> GetPersonByNationalIdAsync(string nationalId);
+        Task<IEnumerable<PersonResponse>> GetAllPersonsAsync(PersonFilterDto filter);
         Task DeletePersonAsync(int personId);
     }
 }

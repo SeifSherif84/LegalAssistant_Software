@@ -15,7 +15,7 @@ namespace Domain.Entities
 
 
         public int PersonId { get; set; } // Foreign key to Person
-        public Person Person { get; set; } // Navigation property to Person
+        public Person? Person { get; set; } // Navigation property to Person
 
 
         // Defendant-specific 

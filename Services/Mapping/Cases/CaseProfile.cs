@@ -14,7 +14,7 @@ namespace Services.Mapping.Cases
         public CaseProfile()
         {
             CreateMap<CreateCaseRequest, Case>();
-            CreateMap<Case, CaseResponse>();
+            CreateMap<Case, CaseResponse>().ReverseMap();
             CreateMap<UpdateCaseRequest, Case>();
         }
     }
