@@ -2,7 +2,7 @@
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Entities.Enums;
-using Domain.Events.Decisions;
+using Shared.Events.Decisions;
 using Domain.Exceptions.NotFound;
 using MediatR;
 using Services.Specifications.CourtSessions;

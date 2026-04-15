@@ -2,8 +2,8 @@
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Entities.Enums;
-using Domain.Events.Decisions;
-using Domain.Events.Sessions;
+using Shared.Events.Decisions;
+using Shared.Events.Sessions;
 using Domain.Exceptions.BadRequest;
 using Domain.Exceptions.NotFound;
 using Domain.Exceptions.UnauthorizedException;
@@ -30,8 +30,7 @@ namespace Services.Decisions
             var session = await GetSession(sessionId);
 
             // Check if the lawyer is assigned to the case
-            if (!session.Case.Lawyers.Any(L => L.Id == lawyerId))
-                throw new UnauthorizedException("You are not authorized to create a decision for this case");
+            EnsureLawyerAuthorized(session.Case,lawyerId);
 
 
             var decision = _mapper.Map<Decision>(request);
@@ -66,16 +65,17 @@ namespace Services.Decisions
             var decision = await _unitOfWork.GetRepository<int, Decision>().GetByIdAsync(spec);
             if (decision is null)
                 throw new DecisionNotFoundException("Decision is not found");
-            if (decision.Case.Lawyers.Any(L => L.Id == lawyerId) && decision.CaseId == caseId)
-            {
-                _unitOfWork.GetRepository<int, Decision>().Delete(decision);
-                var result = await _unitOfWork.SaveChangesAsync();
-                if (result <= 0)
-                    throw new DecisionDeletionFailedException("Failed to delete decision");
-            }
-            else
-                throw new UnauthorizedException("You are not authorized to delete this decision");
 
+            EnsureLawyerAuthorized(decision.Case,lawyerId);
+
+            if (decision.CaseId != caseId)
+                throw new UnauthorizedException("You are not authorized to delete this decision");
+         
+            _unitOfWork.GetRepository<int, Decision>().Delete(decision);
+
+            var result = await _unitOfWork.SaveChangesAsync();
+            if (result <= 0)
+                throw new DecisionDeletionFailedException("Failed to delete decision");
         }
 
         public async Task<IEnumerable<DecisionResponse>> GetAllDecisionsAsync(int caseId, string lawyerId, DecisionFilterDto filter)
@@ -91,19 +91,16 @@ namespace Services.Decisions
             //        throw new UnauthorizedException("You are not authorized to view these decisions");
             //}
             #endregion
+            EnsureLawyerAuthorized(caseEntity, lawyerId);
+            
+            var spec = new DecisionWithDetailsSpecification(caseId, filter);
+            var decisions = await _unitOfWork.GetRepository<int, Decision>().GetAllAsync(spec);
 
-            if (caseEntity.Lawyers.Any(L => L.Id == lawyerId))
-            {
-                var spec = new DecisionWithDetailsSpecification(caseId, filter);
-                var decisions = await _unitOfWork.GetRepository<int, Decision>().GetAllAsync(spec);
+            if (decisions is null || !decisions.Any())
+                throw new DecisionNotFoundException("No decisions found");
 
-                if (decisions is null || !decisions.Any())
-                    throw new DecisionNotFoundException("No decisions found");
-
-                return _mapper.Map<IEnumerable<DecisionResponse>>(decisions);
-            }
-            else
-                throw new UnauthorizedException("You are not authorized to view these decisions");
+            return _mapper.Map<IEnumerable<DecisionResponse>>(decisions);
+          
         }
 
         public async Task<DecisionResponse> GetDecisionByIdAsync(int caseId, int decisionId, string lawyerId)
@@ -112,11 +109,13 @@ namespace Services.Decisions
             var decision = await _unitOfWork.GetRepository<int, Decision>().GetByIdAsync(spec);
             if (decision is null)
                 throw new DecisionNotFoundException("Decision is not found");
+            EnsureLawyerAuthorized(decision.Case, lawyerId);
 
-            if (decision.Case.Lawyers.Any(L => L.Id == lawyerId) && decision.CaseId == caseId)
-                return _mapper.Map<DecisionResponse>(decision);
-            else
+            if (decision.CaseId != caseId)
                 throw new UnauthorizedException("You are not authorized to view this decision");
+
+            return _mapper.Map<DecisionResponse>(decision);
+                
         }
 
         public async Task<DecisionResponse> UpdateDecision(int caseId, int decisionId, string lawyerId, DecisionRequest request)
@@ -125,31 +124,28 @@ namespace Services.Decisions
             var decision = await _unitOfWork.GetRepository<int, Decision>().GetByIdAsync(spec);
             if (decision is null)
                 throw new DecisionNotFoundException("Decision is not found");
-            if (decision.Case.Lawyers.Any(L => L.Id == lawyerId))
-            {
-                if (decision.CaseId == caseId)
-                {
-                    _mapper.Map(request, decision);
-                    _unitOfWork.GetRepository<int, Decision>().Update(decision);
-                    var result = await _unitOfWork.SaveChangesAsync();
-                    if (result <= 0)
-                        throw new DecisionUpdateFailedBadRequestException("Failed to update decision");
-                    if (request.NextSessionDate.HasValue)
-                    {
-                        await _mediator.Publish(new DecisionCreatedEvent
-                        {
-                            SessionId = decision.CourtSessionId,
-                            NextSessionDate = request.NextSessionDate.Value
-                        });
-                    }
 
-                    return _mapper.Map<DecisionResponse>(decision);
-                }
-                else
-                    throw new UnauthorizedException("You are not authorized");
-            }
-            else
+            EnsureLawyerAuthorized(decision.Case, lawyerId);
+
+            if (decision.CaseId != caseId)
                 throw new UnauthorizedException("You are not authorized to update this decision");
+            
+            _mapper.Map(request, decision);
+            _unitOfWork.GetRepository<int, Decision>().Update(decision);
+            var result = await _unitOfWork.SaveChangesAsync();
+            if (result <= 0)
+                throw new DecisionUpdateFailedBadRequestException("Failed to update decision");
+            if (request.NextSessionDate.HasValue)
+            {
+                await _mediator.Publish(new DecisionCreatedEvent
+                {
+                    SessionId = decision.CourtSessionId,
+                    NextSessionDate = request.NextSessionDate.Value
+                });
+            }
+
+            return _mapper.Map<DecisionResponse>(decision);
+            
         }
 
 
@@ -187,7 +183,12 @@ namespace Services.Decisions
         }
         private async Task<CourtSession> GetSession(int sessionId) 
         {
-             return await _mediator.Send(new GetSessionEvent(sessionId));
+             return await _mediator.Send(new GetSessionCommand(sessionId));
+        }
+        private static void EnsureLawyerAuthorized(Case caseEntity, string lawyerId)
+        {
+            if (!caseEntity.Lawyers.Any(l => l.Id == lawyerId))
+                throw new UnauthorizedException("You are not authorized");
         }
     }
 }

@@ -12,9 +12,11 @@ using Persistence;
 using Persistence.Data.Contexts;
 using Services;
 using Services.Abstractions;
+using Services.Abstractions.Persons;
 using Services.CourtSessions.Handlers;
 using Services.Decisions;
 using Services.Mapping.Authentications;
+using Services.Mapping.CaseParties;
 using Services.Mapping.Cases;
 using Services.Mapping.ChatBot;
 using Services.Mapping.CourtSessions;
@@ -22,6 +24,7 @@ using Services.Mapping.Decisions;
 using Services.Mapping.Documents;
 using Services.Mapping.Lawyers;
 using Services.Mapping.Persons;
+using Services.Persons;
 using Shared.Dtos.Authentications;
 using Store.G02.Persistence;
 using System.Text;
@@ -83,6 +86,7 @@ namespace Web
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IPersonService, PersonService>();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
                 typeof(DecisionService).Assembly,
                 typeof(UpdateSessionDateHandler).Assembly
@@ -125,6 +129,7 @@ namespace Web
                 Config.AddProfile(new ChatBotProfile());
                 Config.AddProfile(new DecisionProfile());
                 Config.AddProfile(new PersonProfile());
+                Config.AddProfile(new CasePartyProfile());
             });
 
 

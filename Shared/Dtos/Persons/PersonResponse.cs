@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Dtos.Persons
 {
-    public class PersonResponce
+    public class PersonResponse
     {
         public int Id { get; set; }
 

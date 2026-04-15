@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Events.Decisions
+namespace Shared.Events.Decisions
 {
     public class DecisionCreatedEvent : INotification
     {

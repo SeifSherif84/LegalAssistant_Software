@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Events.Sessions
+namespace Shared.Events.Sessions
 {
-    public class GetSessionEvent : IRequest<CourtSession>
+    public class GetSessionCommand : IRequest<CourtSession>
     {
         public int SessionId { get; set; }
-        public GetSessionEvent(int sessionId)
+        public GetSessionCommand(int sessionId)
         {
             SessionId = sessionId;
         }

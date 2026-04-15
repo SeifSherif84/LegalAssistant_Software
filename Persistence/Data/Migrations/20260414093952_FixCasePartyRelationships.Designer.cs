@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Data.Contexts;
 
@@ -11,9 +12,11 @@ using Persistence.Data.Contexts;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414093952_FixCasePartyRelationships")]
+    partial class FixCasePartyRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,7 +256,8 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("LawyerId");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("PersonId")
+                        .IsUnique();
 
                     b.ToTable("CaseParties");
                 });
@@ -675,16 +679,13 @@ namespace Persistence.Data.Migrations
 
                     b.Property<string>("NationalIdNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NationalIdNumber")
-                        .IsUnique();
 
                     b.ToTable("Persons");
                 });
@@ -1009,8 +1010,8 @@ namespace Persistence.Data.Migrations
                         .HasForeignKey("LawyerId");
 
                     b.HasOne("Domain.Entities.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CaseParty", "PersonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

@@ -15,6 +15,8 @@ namespace Persistence.Data.Configurations
         {
             builder.OwnsOne(P => P.Address);
             builder.OwnsOne(P => P.ContactInfo);
+            builder.HasIndex(P => P.NationalIdNumber)
+            .IsUnique();
         }
     }
 }

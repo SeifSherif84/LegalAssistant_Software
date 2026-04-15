@@ -22,12 +22,12 @@ namespace Services.Mapping.Persons
             CreateMap<PersonRequest, Person>()
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
 
-            CreateMap<Person, PersonResponce>()
+            CreateMap<Person, PersonResponse>()
                 .ForMember(dest => dest.Age,
                     opt => opt.MapFrom(src =>
                         DateTime.Now < src.DateOfBirth.AddYears(DateTime.Now.Year - src.DateOfBirth.Year)
                             ? DateTime.Now.Year - src.DateOfBirth.Year - 1
-                            : DateTime.Now.Year - src.DateOfBirth.Year));
+                            : DateTime.Now.Year - src.DateOfBirth.Year)).ReverseMap();
         }
     }
 }

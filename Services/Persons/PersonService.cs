@@ -19,14 +19,14 @@ namespace Services.Persons
 {
     public class PersonService(IUnitOfWork _unitOfWork, IMapper _mapper) : IPersonService
     {
-        public async Task<PersonResponce> CreatePerson(PersonRequest personRequest)
+        public async Task<PersonResponse> CreatePerson(PersonRequest personRequest)
         {
             if (personRequest is null)
                 throw new BadRequestException("Request cannot be null");
 
             personRequest.Email = personRequest.Email.ToLower();
 
-            var emailExistSpec = new PersonByEmailSpecification(personRequest.Email.ToLower(),null);
+            var emailExistSpec = new PersonByNationalIdSpecification(personRequest.Email,null);
             var existingPerson = await _unitOfWork.GetRepository<int, Person>().AnyAsync(emailExistSpec);
             if (existingPerson)
                 throw new BadRequestException("Email already exists");
@@ -37,19 +37,25 @@ namespace Services.Persons
             if (result <= 0)
                 throw new CreationFailedException("Failed to create Person");
 
-            return _mapper.Map<PersonResponce>(person);
+            return _mapper.Map<PersonResponse>(person);
         }
 
-        public async Task<PersonResponce> GetPersonByIdAsync(int personId)
+        public async Task<PersonResponse> GetPersonByIdAsync(int personId)
         {
             var spec = new PersonWithDetailsSpecification(personId);
             var person = await _unitOfWork.GetRepository<int, Person>().GetByIdAsync(spec);
             if(person is null)
                 throw new PersonNotFoundException("No person found");
-            return _mapper.Map<PersonResponce>(person);
+            return _mapper.Map<PersonResponse>(person);
+        }
+        public async Task<Person> GetPersonByNationalIdAsync(string nationalId)
+        {
+            var spec = new PersonByNationalIdSpecification(nationalId, null);
+            var person = await _unitOfWork.GetRepository<int, Person>().GetByIdAsync(spec);
+            return person;
         }
 
-        public async Task<IEnumerable<PersonResponce>> GetAllPersonsAsync(PersonFilterDto filter)
+        public async Task<IEnumerable<PersonResponse>> GetAllPersonsAsync(PersonFilterDto filter)
         {
             var spec = new PersonWithDetailsSpecification(filter);
             var persons = await _unitOfWork.GetRepository<int, Person>().GetAllAsync(spec);
@@ -57,10 +63,10 @@ namespace Services.Persons
             if (persons is null || persons.Count() == 0)
                 throw new PersonNotFoundException("No persons found with the provided filter criteria.");
 
-            return _mapper.Map<IEnumerable<PersonResponce>>(persons);
+            return _mapper.Map<IEnumerable<PersonResponse>>(persons);
         }
 
-        public async Task<PersonResponce> UpdatePerson(int personId, PersonRequest personRequest)
+        public async Task<PersonResponse> UpdatePerson(int personId, PersonRequest personRequest)
         {
             if (personRequest is null)
                 throw new BadRequestException("Request cannot be null");
@@ -71,7 +77,7 @@ namespace Services.Persons
                 throw new PersonNotFoundException("No person found");
 
             var email = personRequest.Email.Trim().ToLower();
-            var emailExistSpec = new PersonByEmailSpecification(email, personId);
+            var emailExistSpec = new PersonByNationalIdSpecification(email, personId);
             var existingPersonWithEmail = await _unitOfWork.GetRepository<int, Person>().AnyAsync(emailExistSpec);
             if (existingPersonWithEmail)
                 throw new BadRequestException("Email already exists");
@@ -82,7 +88,7 @@ namespace Services.Persons
             var result = await _unitOfWork.SaveChangesAsync();
             if (result <= 0)
                 throw new UpdateFailedBadRequestException("Failed to update Person");
-            return _mapper.Map<PersonResponce>(person);
+            return _mapper.Map<PersonResponse>(person);
         }
 
         public async Task DeletePersonAsync(int personId)

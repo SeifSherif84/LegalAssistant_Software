@@ -1,7 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
 using Domain.Entities.Enums;
-using Domain.Events.Sessions;
+using Shared.Events.Sessions;
 using MediatR;
 using System;
 using System.Collections.Generic;
