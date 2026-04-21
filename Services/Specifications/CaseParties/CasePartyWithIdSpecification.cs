@@ -12,8 +12,10 @@ namespace Services.Specifications.CaseParties
         public CasePartyWithIdSpecification(int caseId, int casePartyId)
         {
             Criteria = CP =>
-                           (CP.CaseId == caseId) &&
-                           (CP.Id == casePartyId);
+                           CP.CaseId == caseId &&
+                           CP.Id == casePartyId;
+            Includes.Add(cp => cp.Person);
+            Includes.Add(cp => cp.Case.Lawyers);
         }
     }
 }

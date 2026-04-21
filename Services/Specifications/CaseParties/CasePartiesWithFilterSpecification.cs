@@ -16,6 +16,8 @@ namespace Services.Specifications.CaseParties
                             (CP.CaseId == caseId) &&
                             (!PersonId.HasValue || CP.PersonId == PersonId.Value) &&
                             (!role.HasValue || CP.Role == role.Value);
+            Includes.Add(cp => cp.Person);
+            Includes.Add(cp => cp.Case);
         }
     }
 }

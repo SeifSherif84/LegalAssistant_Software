@@ -1,4 +1,5 @@
 ﻿using Shared.Dtos.CaseParties;
+using Shared.Dtos.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Services.Abstractions.CaseParty
         Task<CasePartyWithPersonResponse> UpdateCasePartyAsync(string lawyerId, int caseId, int casePartyId, CasePartyWithPersonRequest request);
         Task<CasePartyWithPersonResponse> GetCasePartyByIdAsync(int caseId, int casePartyId);
         Task<IEnumerable<CasePartyWithPersonResponse>> GetCasePartiesAsync(int caseId, CasePartyFilterDto filter);
+        Task<IEnumerable<PersonResponse>> GetPersonsAsync(string lawyerId);
         Task DeleteCasePartyAsync(string lawyerId, int caseId, int casePartyId);
     }
 }

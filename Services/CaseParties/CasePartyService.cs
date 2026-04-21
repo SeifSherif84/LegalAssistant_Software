@@ -12,7 +12,6 @@ using Services.Specifications.Persons;
 using Shared.Dtos.CaseParties;
 using Shared.Dtos.Persons;
 using Shared.Events.Cases;
-using Shared.Events.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,11 @@ namespace Services.CaseParties
 
             var caseParty = _mapper.Map<CaseParty>(request);
             caseParty.CaseId = caseId;
-            caseParty.LawyerId = lawyerId;
+
+            if(request.Role==Domain.Entities.Enums.PartyRole.WITNESS)
+                caseParty.LawyerId = null;
+            else
+                caseParty.LawyerId = lawyerId;
 
             var existingPerson = await _personService.GetPersonByNationalIdAsync(request.Person.NationalIdNumber);
             //_mapper.Map(request.Person, existingPerson);
@@ -76,6 +79,17 @@ namespace Services.CaseParties
 
             return _mapper.Map<IEnumerable<CasePartyWithPersonResponse>>(caseParties);
         }
+        public async Task<IEnumerable<PersonResponse>> GetPersonsAsync(string lawyerId)
+        {
+            var spec = new CasePartiesWithLawyerIdSpecification(lawyerId);
+            var caseParties = await _unitOfWork.GetRepository<int, CaseParty>().GetAllAsync(spec);
+
+            if (caseParties is null || caseParties.Count() == 0)
+                throw new PersonNotFoundException("No Case Parties found with the provided filter criteria.");
+
+            return _mapper.Map<IEnumerable<PersonResponse>>(caseParties);
+        }
+
 
         public async Task<CasePartyWithPersonResponse> GetCasePartyByIdAsync(int caseId, int casePartyId)
         {
@@ -95,7 +109,12 @@ namespace Services.CaseParties
 
             EnsureLawyerAuthorized(caseParty.Case, lawyerId);
 
-            await _personService.UpdatePerson(caseParty.PersonId, request.Person);
+            _mapper.Map(request, caseParty);
+
+            _unitOfWork.GetRepository<int, CaseParty>().Update(caseParty);
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            //await _personService.UpdatePerson(caseParty.PersonId, request.Person);
             return _mapper.Map<CasePartyWithPersonResponse>(caseParty);
         }
         public async Task DeleteCasePartyAsync(string lawyerId, int caseId, int casePartyId)

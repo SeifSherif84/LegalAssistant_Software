@@ -1,27 +1,28 @@
-﻿using Domain.Entities.Identity;
+﻿using AutoMapper;
+using Company.PL.Helper.MailKitFeature;
+using Domain.Entities;
+using Domain.Entities.Identity;
+using Domain.Exceptions.AlreadyExist;
+using Domain.Exceptions.BadRequest;
 using Domain.Exceptions.NotFound;
+using Domain.Exceptions.ServerError;
 using Domain.Exceptions.UnauthorizedException;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstractions.Authentications;
+using Services.Helper;
 using Shared.Dtos.Authentications;
-using System.IdentityModel.Tokens.Jwt;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using Domain.Entities;
-using Domain.Exceptions.AlreadyExist;
-using AutoMapper;
-using Domain.Exceptions.BadRequest;
-using Services.Helper;
-using Microsoft.AspNetCore.Mvc;
-using Company.PL.Helper.MailKitFeature;
-using Microsoft.Extensions.Configuration;
-using Domain.Exceptions.ServerError;
 
 namespace Services.Authentications
 {
@@ -143,6 +144,20 @@ namespace Services.Authentications
                 throw new ServerErrorExceptionList(result.Errors.Select(E => E.Description).ToList());
         }
 
+        public async Task ChangePassword(string userId, ChangePasswordDto model) 
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+                throw new UserNotFoundException(user.Email);
+
+            if (model.NewPassword != model.ConfirmPassword)
+                throw new PasswordsDoNotMatchBadRequestException("New password and confirm password do not match.");
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+                throw new ServerErrorExceptionList(result.Errors.Select(e => e.Description).ToList());
+        }
 
         public async Task DeleteAccountAsync(string userId)
         {

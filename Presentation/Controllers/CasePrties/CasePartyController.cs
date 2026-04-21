@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Entities.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.Dtos.CaseParties;
@@ -17,6 +18,7 @@ namespace Presentation.Controllers.CasePrties
     {
         [Authorize]
         [HttpPost]
+        [Route("{caseId}")]
         public async Task<IActionResult> AddCaseParty(int caseId, CasePartyWithPersonRequest casePartyRequest)
         {
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -42,6 +44,15 @@ namespace Presentation.Controllers.CasePrties
         }
         [Authorize]
         [HttpGet]
+        [Route("GetPersons")]
+        public async Task<IActionResult> GetPersons()
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var persons = await _serviceManager.CasePartyService.GetPersonsAsync(lawyerId);
+            return Ok(persons);
+        }
+        [Authorize]
+        [HttpGet]
         [Route("{caseId}/{casePartyId}")]
         public async Task<IActionResult> GetCasePartyById(int caseId, int casePartyId)
         {
@@ -56,6 +67,19 @@ namespace Presentation.Controllers.CasePrties
             var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _serviceManager.CasePartyService.DeleteCasePartyAsync(lawyerId, caseId, casePartyId);
             return Ok("Case Party Deleted Succesfully");
+        }
+        [HttpGet("Roles")]
+        //[Authorize]
+        public IActionResult GetSentenceTypes()
+        {
+            var Roles = Enum.GetValues(typeof(PartyRole))
+                                     .Cast<PartyRole>()
+                                     .Select(DT => new
+                                     {
+                                         Id = (int)DT,
+                                         Name = DT.ToString(),
+                                     });
+            return Ok(Roles);
         }
     }
 }

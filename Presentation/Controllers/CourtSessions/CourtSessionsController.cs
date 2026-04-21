@@ -78,8 +78,14 @@ namespace Presentation.Controllers.CourtSessions
             await _serviceManager.CourtSessionService.DeleteSessionAsync(sessionId, lawyerId);
             return Ok("Session deleted successfully.");
         }
-
-
+        [HttpGet("GetNextHearing/Case/{caseId}")] // GET: api/CourtSessions/GetAllSessions/Case/{caseId}
+        [Authorize]
+        public async Task<IActionResult> GetNextHearing(int caseId)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var session = await _serviceManager.CourtSessionService.NextHearing(lawyerId, caseId);
+            return Ok(session);
+        }
 
 
         [HttpPut("UpdateSession/{sessionId}")] // PUT: api/CourtSessions/UpdateSession/{sessionId}

@@ -65,14 +65,27 @@ namespace Presentation.Controllers.Decisions
         [Authorize]
         public IActionResult GetDecisionTypes()
         {
-            var sessionTypes = Enum.GetValues(typeof(DecisionType))
+            var DecisionTypes = Enum.GetValues(typeof(DecisionType))
                                      .Cast<DecisionType>()
                                      .Select(DT => new
                                      {
                                          Id = (int)DT,
                                          Name = DT.ToString(),
                                      });
-            return Ok(sessionTypes);
+            return Ok(DecisionTypes);
+        }
+        [HttpGet("SentenceTypes")]
+        [Authorize]
+        public IActionResult GetSentenceTypes()
+        {
+            var sentenceTypes = Enum.GetValues(typeof(SentenceType))
+                                     .Cast<SentenceType>()
+                                     .Select(DT => new
+                                     {
+                                         Id = (int)DT,
+                                         Name = DT.ToString(),
+                                     });
+            return Ok(sentenceTypes);
         }
     }
 }
