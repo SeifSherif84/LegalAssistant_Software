@@ -13,31 +13,33 @@ namespace Presentation.Controllers.Persons
     [Route("api/[controller]")]
     public class PersonsController(IServiceManager _serviceManager) : ControllerBase
     {
-        [HttpPost]
-        public async Task<IActionResult> AddPerson(PersonRequest personRequest)
-        {
-            var personResponce = await _serviceManager.PersonService.CreatePerson(personRequest);
-            return Ok(personResponce);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> AddPerson(PersonRequest personRequest)
+        //{
+        //    var personResponce = await _serviceManager.PersonService.CreatePerson(personRequest);
+        //    return Ok(personResponce);
+        //}
         [HttpGet("{personId}")]
         public async Task<IActionResult> GetPersonByID(int personId)
         {
             var personResponce = await _serviceManager.PersonService.GetPersonByIdAsync(personId);
             return Ok(personResponce);
         }
-        [HttpGet("GetAllPersons")]
-        public async Task<IActionResult> GetAllPersons([FromQuery] PersonFilterDto filter)
-        {
-            var personResponce = await _serviceManager.PersonService.GetAllPersonsAsync(filter);
-            return Ok(personResponce);
-        }
+        //[HttpGet("GetAllPersons")]
+        //public async Task<IActionResult> GetAllPersons([FromQuery] PersonFilterDto filter)
+        //{
+        //    var personResponce = await _serviceManager.PersonService.GetAllPersonsAsync(filter);
+        //    return Ok(personResponce);
+        //}
         [HttpPut]
+        [Route("{personId}")]
         public async Task<IActionResult> UpdatePerson(int personId, PersonRequest personRequest)
         {
             var personResponce = await _serviceManager.PersonService.UpdatePerson(personId, personRequest);
             return Ok(personResponce);
         }
         [HttpDelete]
+        [Route("{personId}")]
         public async Task<IActionResult> DeletePerson(int personId)
         {
             await _serviceManager.PersonService.DeletePersonAsync(personId);

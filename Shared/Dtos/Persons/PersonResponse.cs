@@ -28,5 +28,7 @@ namespace Shared.Dtos.Persons
         public AddressDto Address { get; set; }
 
         public ContactInfoDto ContactInfo { get; set; }
+
+        public string? CaseName { get; set; } 
     }
 }

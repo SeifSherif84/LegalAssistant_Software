@@ -168,7 +168,24 @@ namespace Services.CourtSessions
         }
 
 
+        public async Task<CourtSessionResponse> NextHearing(string lawyerId, int caseId)
+        {
+            
+            var todayDate = DateTime.Now.Date;
+            var sessionSpecifications = new CourtSessionOrderdByDateSpecification(caseId,todayDate);
+            var sessions = await _unitOfWork.GetRepository<int, CourtSession>().GetAllAsync(sessionSpecifications);
 
+            
+            var sessionEntity = sessions.FirstOrDefault();
+
+            if (sessionEntity is null)
+                throw new SessionNotFoundException("No Sessions Found");
+
+            if (!sessionEntity.Case.Lawyers.Any(L => L.Id == lawyerId))
+                throw new UnauthorizedAccessException("You don't have permission to Load Sessions for this case.");
+
+            return _mapper.Map<CourtSessionResponse>(sessionEntity);
+        }
 
         public async Task<IEnumerable<CourtSessionResponseForDashboard>> GetLawyerSessionsAsync(string lawyerId, string period)
         {

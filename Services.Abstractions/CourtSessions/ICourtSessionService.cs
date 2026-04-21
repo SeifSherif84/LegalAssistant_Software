@@ -17,5 +17,6 @@ namespace Services.Abstractions.CourtSessions
         Task UpdateSessionAsync(int sessionId, string lawyerId, UpdateCourtSession updateCourtSession);
         Task<CourtSessionResponse> GetSessionByIdAsync(int sessionId, string lawyerId);
         Task<IEnumerable<CourtSessionResponseForDashboard>> GetLawyerSessionsAsync(string lawyerId, string period);
+        Task<CourtSessionResponse> NextHearing(string lawyerId, int caseId);
     }
 }
