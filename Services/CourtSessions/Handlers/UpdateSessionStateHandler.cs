@@ -15,7 +15,7 @@ namespace Services.CourtSessions.Handlers
     {
         public async Task Handle(SessionStateUpdatedEvent notification, CancellationToken cancellationToken)
         {
-            notification.Session.SessionStatus = SessionStatus.Completed;
+            notification.Session.SessionStatus = SessionStatus.مكتملة;
             _unitOfWork.GetRepository<int, CourtSession>().Update(notification.Session);
             await _unitOfWork.SaveChangesAsync();
         }

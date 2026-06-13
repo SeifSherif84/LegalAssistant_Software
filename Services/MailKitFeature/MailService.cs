@@ -1,4 +1,6 @@
 ﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
@@ -6,47 +8,60 @@ namespace Company.PL.Helper.MailKitFeature
 {
     public class MailService : IMailService
     {
-        private readonly IOptions<MailKitSetting> _mailSetting;
+        private readonly MailKitSetting _mailSetting;
+        private readonly ILogger<MailService> _logger;
 
-        public MailService(IOptions<MailKitSetting> mailSetting)
+        public MailService(IOptions<MailKitSetting> mailSetting, ILogger<MailService> logger)
         {
-            _mailSetting = mailSetting;
+            _mailSetting = mailSetting.Value; 
+            _logger = logger;
         }
 
-        public bool SendMail(Email email)
+        public async Task<bool> SendMailAsync(Email email)
         {
             try
             {
-                // Build Message
-
+                // ── Build Message ──────────────────────────────────
                 var mail = new MimeMessage();
 
-                mail.From.Add(new MailboxAddress(_mailSetting.Value.DisplayName, _mailSetting.Value.Email)); // Sender
-                mail.To.Add(MailboxAddress.Parse(email.To)); // Receiver
-                mail.Subject = email.Subject; // Subject
+                mail.From.Add(new MailboxAddress(_mailSetting.DisplayName, _mailSetting.Email));
+                mail.To.Add(MailboxAddress.Parse(email.To));
+                mail.Subject = email.Subject;
 
                 var body = new BodyBuilder();
-                body.TextBody = email.Body;
-                mail.Body = body.ToMessageBody(); // Body
 
+                if (email.IsHtml)
+                    body.HtmlBody = email.Body;   
+                else
+                    body.TextBody = email.Body;  
 
-                // Open Connection With Mail Server
-                using var SmtpServerClient = new SmtpClient(); // Server Client
-                SmtpServerClient.Connect(_mailSetting.Value.Host, _mailSetting.Value.Port);
-                SmtpServerClient.Authenticate(_mailSetting.Value.Email, _mailSetting.Value.Password);
+                mail.Body = body.ToMessageBody();
 
+                // ── Connect & Send ─────────────────────────────────
+                using var smtpClient = new SmtpClient();
 
-                // Send Mail
-                SmtpServerClient.Send(mail);
+                await smtpClient.ConnectAsync(
+                    _mailSetting.Host,
+                    _mailSetting.Port,
+                    SecureSocketOptions.StartTls  
+                );
 
-                return true ;
+                await smtpClient.AuthenticateAsync(_mailSetting.Email, _mailSetting.Password);
+
+                await smtpClient.SendAsync(mail);
+
+                await smtpClient.DisconnectAsync(quit: true); 
+
+                _logger.LogInformation("Email sent successfully to {Recipient}", email.To);
+
+                return true;
             }
-
-            catch (Exception)
+            catch (Exception ex)
             {
+                
+                _logger.LogError(ex, "Failed to send email to {Recipient}", email.To);
                 return false;
             }
-
         }
     }
 }

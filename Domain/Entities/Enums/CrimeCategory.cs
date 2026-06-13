@@ -9,8 +9,8 @@ namespace Domain.Entities.Enums
     // تصنيف الجريمة (مهم جداً لتحديد العقوبات والمواعيد)
     public enum CrimeCategory
     {
-        Felony = 1,      // جناية
-        Misdemeanor = 2, // جنحة
-        Infraction = 3   // مخالفة
+        جناية = 1,
+        جنحة = 2,
+        مخالفة = 3
     }
 }

@@ -9,9 +9,9 @@ namespace Domain.Entities.Enums
     // نوع القرار القضائي
     public enum DecisionType
     {
-        Preliminary = 1,    // حكم تمهيدي (مثل إحالة للخبراء أو الطب الشرعي)
-        Final = 2,          // حكم قطعي (يفصل في موضوع الدعوى)
-        Interlocutory = 3,  // حكم فرعي (أثناء سير القضية)
-        Injunction = 4      // أمر وقتي أو مستعجل
+        تمهيدي = 1,
+        نهائي = 2,
+        فرعي = 3,
+        أمر_وقتي = 4
     }
 }

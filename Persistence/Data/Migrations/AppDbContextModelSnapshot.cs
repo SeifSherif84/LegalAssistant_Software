@@ -34,7 +34,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("LawyersId");
 
-                    b.ToTable("CaseLawyer", (string)null);
+                    b.ToTable("CaseLawyer");
                 });
 
             modelBuilder.Entity("Domain.Entities.AiAnalysis", b =>
@@ -76,7 +76,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("DocumentId");
 
-                    b.ToTable("AiAnalyses", (string)null);
+                    b.ToTable("AiAnalyses");
                 });
 
             modelBuilder.Entity("Domain.Entities.Appeal", b =>
@@ -143,7 +143,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("ResultDecisionId");
 
-                    b.ToTable("Appeals", (string)null);
+                    b.ToTable("Appeals");
                 });
 
             modelBuilder.Entity("Domain.Entities.Case", b =>
@@ -203,7 +203,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cases", (string)null);
+                    b.ToTable("Cases");
                 });
 
             modelBuilder.Entity("Domain.Entities.CaseParty", b =>
@@ -255,7 +255,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("CaseParties", (string)null);
+                    b.ToTable("CaseParties");
                 });
 
             modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatMessage", b =>
@@ -289,7 +289,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("ChatSessionId");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatSession", b =>
@@ -299,6 +299,9 @@ namespace Persistence.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConanSessionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -321,7 +324,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("LawyerId");
 
-                    b.ToTable("ChatSessions", (string)null);
+                    b.ToTable("ChatSessions");
                 });
 
             modelBuilder.Entity("Domain.Entities.CourtSession", b =>
@@ -372,6 +375,9 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTime?>("ReminderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("ReminderSent")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("SessionDate")
                         .HasColumnType("datetime2");
 
@@ -387,7 +393,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("NextSessionId");
 
-                    b.ToTable("CourtSessions", (string)null);
+                    b.ToTable("CourtSessions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Decision", b =>
@@ -444,7 +450,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("CourtSessionId");
 
-                    b.ToTable("Decisions", (string)null);
+                    b.ToTable("Decisions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Document", b =>
@@ -502,7 +508,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("LawyerId");
 
-                    b.ToTable("Documents", (string)null);
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.UserApp", b =>
@@ -642,7 +648,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Logs", (string)null);
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("Domain.Entities.Person", b =>
@@ -686,7 +692,7 @@ namespace Persistence.Data.Migrations
                     b.HasIndex("NationalIdNumber")
                         .IsUnique();
 
-                    b.ToTable("Persons", (string)null);
+                    b.ToTable("Persons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -897,7 +903,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Lawyer", b =>
@@ -1127,7 +1133,7 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Person", b =>
                 {
-                    b.OwnsOne("Domain.Entities.Person.Address#Domain.Entities.HelperClass.Address", "Address", b1 =>
+                    b.OwnsOne("Domain.Entities.HelperClass.Address", "Address", b1 =>
                         {
                             b1.Property<int>("PersonId")
                                 .HasColumnType("int");
@@ -1153,13 +1159,13 @@ namespace Persistence.Data.Migrations
 
                             b1.HasKey("PersonId");
 
-                            b1.ToTable("Persons", (string)null);
+                            b1.ToTable("Persons");
 
                             b1.WithOwner()
                                 .HasForeignKey("PersonId");
                         });
 
-                    b.OwnsOne("Domain.Entities.Person.ContactInfo#Domain.Entities.HelperClass.ContactInfo", "ContactInfo", b1 =>
+                    b.OwnsOne("Domain.Entities.HelperClass.ContactInfo", "ContactInfo", b1 =>
                         {
                             b1.Property<int>("PersonId")
                                 .HasColumnType("int");
@@ -1174,7 +1180,7 @@ namespace Persistence.Data.Migrations
 
                             b1.HasKey("PersonId");
 
-                            b1.ToTable("Persons", (string)null);
+                            b1.ToTable("Persons");
 
                             b1.WithOwner()
                                 .HasForeignKey("PersonId");

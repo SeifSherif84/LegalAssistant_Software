@@ -126,7 +126,7 @@ namespace Services.Authentications
                 Body = $"Please use the following token to reset your password: {callbackUrl}"
             };
 
-            var result = _mailService.SendMail(email);
+            var result = await _mailService.SendMailAsync(email);
             if (!result)
                 throw new ServerErrorExceptionText("Failed to send email. Please try again later.");
         }

@@ -33,7 +33,7 @@ namespace Services.Cases
             var newCase = _mapper.Map<Case>(createCaseRequest);
             newCase.CreatedAt = DateTime.UtcNow;
             newCase.UpdatedAt = DateTime.UtcNow;
-            newCase.Status = CaseStatus.Active;
+            newCase.Status = CaseStatus.مفتوحة;
 
             if (lawyer.Cases is null)
                 lawyer.Cases = new List<Case>();

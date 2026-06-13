@@ -44,7 +44,7 @@ namespace Services.CourtSessions
             if (caseEntity.Lawyers.Any(L => L.Id == lawyerId))
             {
                 var newCourtSession = _mapper.Map<CourtSession>(createCourtSession);
-                newCourtSession.SessionStatus = SessionStatus.Scheduled;
+                newCourtSession.SessionStatus = SessionStatus.مؤجلة;
                 newCourtSession.CaseId = caseId;
                 await _unitOfWork.GetRepository<int, CourtSession>().Add(newCourtSession);
                 var result = await _unitOfWork.SaveChangesAsync();

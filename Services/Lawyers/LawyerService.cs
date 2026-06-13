@@ -92,9 +92,9 @@ namespace Services.Lawyers
 
                 // Case --> Lawyers
                 // Check Case If Related To Lawyer Or Not By Checking If Any Lawyer In This Case Has Id Equal To LawyerId, Then Check Status Of This Case To Get Total Active, Closed And OnHold Cases Count
-                TotalActiveCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.Active),
-                TotalClosedCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.Closed),
-                TotalOnHoldCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.OnHold),
+                TotalActiveCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.مفتوحة),
+                TotalClosedCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.مغلقة),
+                TotalOnHoldCases = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.Status == CaseStatus.معلقة),
                 LastCasesAddedCountPerMonth = await caseRepo.CountAsync(C => C.Lawyers.Any(L => L.Id == lawyerId) && C.CreatedAt >= oneMonthAgo),
 
                 // Session --> Case --> Lawyers

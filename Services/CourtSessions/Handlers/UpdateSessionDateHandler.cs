@@ -35,7 +35,7 @@ namespace Services.CourtSessions.Handlers
                 if (nextSession is null) 
                     throw new SessionNotFoundException("Linked next session not found");
                 nextSession.SessionDate = notification.NextSessionDate;
-                nextSession.SessionStatus = SessionStatus.Scheduled;
+                nextSession.SessionStatus = SessionStatus.مؤجلة;
 
                 _unitOfWork.GetRepository<int, CourtSession>().Update(nextSession);
                 finalNextSessionId = nextSession.Id;
@@ -44,7 +44,7 @@ namespace Services.CourtSessions.Handlers
             {
                 var newSession = _mapper.Map<CourtSession>(currentSession);
                 newSession.SessionDate = notification.NextSessionDate;
-                newSession.SessionStatus = SessionStatus.Scheduled;
+                newSession.SessionStatus = SessionStatus.مؤجلة;
 
                 await _unitOfWork.GetRepository<int, CourtSession>().Add(newSession);
                 await _unitOfWork.SaveChangesAsync();
@@ -52,7 +52,7 @@ namespace Services.CourtSessions.Handlers
             }
 
             currentSession.NextSessionId = finalNextSessionId;
-            currentSession.SessionStatus = SessionStatus.Postponed;
+            currentSession.SessionStatus = SessionStatus.مؤجلة;
 
             _unitOfWork.GetRepository<int, CourtSession>().Update(currentSession);
             await _unitOfWork.SaveChangesAsync();
