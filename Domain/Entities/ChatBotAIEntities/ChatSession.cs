@@ -19,6 +19,7 @@ namespace Domain.Entities.ChatBotAIEntities
 
         public List<ChatMessage> ChatMessages { get; set; }
 
+        public string? ConanSessionId { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? DeletedAt { get; set; }
     }

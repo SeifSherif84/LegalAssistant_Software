@@ -12,6 +12,7 @@ namespace Domain.Entities
     {
         public DateTime SessionDate { get; set; }
         public DateTime? ReminderDate { get; set; }
+        public bool ReminderSent { get; set; } = false;
 
         public string CourtName { get; set; }
         public string CourtRoom { get; set; }

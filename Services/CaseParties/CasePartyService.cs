@@ -31,7 +31,7 @@ namespace Services.CaseParties
             var caseParty = _mapper.Map<CaseParty>(request);
             caseParty.CaseId = caseId;
 
-            if(request.Role==Domain.Entities.Enums.PartyRole.WITNESS)
+            if(request.Role==Domain.Entities.Enums.PartyRole.شاهد)
                 caseParty.LawyerId = null;
             else
                 caseParty.LawyerId = lawyerId;

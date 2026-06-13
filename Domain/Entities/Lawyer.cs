@@ -17,7 +17,7 @@ namespace Domain.Entities
         public string ProfilePictureUrl { get; set; }
         public string BarIdCardUrl { get; set; }   
 
-        public LawyerStatus LawyerStatus { get; set; } = LawyerStatus.Pending; // Pending, Approved, Rejected
+        public LawyerStatus LawyerStatus { get; set; } = LawyerStatus.قيد_المراجعة; // Pending, Approved, Rejected
 
         public List<Case> Cases { get; set; } // Many-to-Many relationship with Case
 

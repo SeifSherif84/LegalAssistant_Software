@@ -9,8 +9,8 @@ namespace Domain.Entities.Enums
     // مستوى ثقة الذكاء الاصطناعي في النتيجة
     public enum ConfidenceLevel
     {
-        Low = 1,
-        Medium = 2,
-        High = 3
+        منخفض = 1,
+        متوسط = 2,
+        مرتفع = 3
     }
 }

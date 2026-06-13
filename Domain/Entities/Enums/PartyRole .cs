@@ -8,11 +8,11 @@ namespace Domain.Entities.Enums
 {
     public enum PartyRole
     {
-        DEFENDANT = 1, // 
-        VICTIM = 2, // 
-        WITNESS = 3, // 
-        PLAINTIFF = 4,
-        APPELLANT = 5
+        متهم = 1,
+        مجني_عليه = 2,
+        شاهد = 3,
+        مدعي = 4,
+        مستأنف = 5
     }
 
 

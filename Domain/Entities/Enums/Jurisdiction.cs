@@ -9,9 +9,9 @@ namespace Domain.Entities.Enums
     // الاختصاص القضائي (درجة المحكمة)
     public enum Jurisdiction
     {
-        Summary = 1,      // محكمة جزئية
-        FirstInstance = 2, // محكمة ابتدائية (كلية)
-        Appellate = 3,    // محكمة استئناف
-        Cassation = 4     // محكمة النقض
+        جزئية = 1,
+        ابتدائية = 2,
+        استئناف = 3,
+        نقض = 4
     }
 }
