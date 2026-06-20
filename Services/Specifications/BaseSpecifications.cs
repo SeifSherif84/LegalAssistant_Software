@@ -12,11 +12,16 @@ namespace Services.Specifications
     {
         public List<Expression<Func<TEntity, object>>> Includes { get; set; }
         public Expression<Func<TEntity, bool>>? Criteria { get; set; }
+        public Expression<Func<TEntity, object>> OrderByDescending { get; set; }
+        public bool IsPaginationEnabled { get; set; }
+        public int Take { get; set; }
+
 
         public BaseSpecifications()
         {
             Includes = new List<Expression<Func<TEntity, object>>>();
             Criteria = null;
+            OrderByDescending = null;
         }
     }
 }

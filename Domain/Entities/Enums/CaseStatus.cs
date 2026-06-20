@@ -8,11 +8,10 @@ namespace Domain.Entities.Enums
 {
     public enum CaseStatus
     {
-        Open = 1, 
-        Closed = 2,
-        Pending = 3,
-        OnHold = 4,
-        Dismissed = 5,
-        Settled = 6
+        Active = 1, // القضية مفتوحة وجارية
+        Closed = 2, // القضية مغلقة وتم الانتهاء منها
+        OnHold = 3, // القضية معلقة مؤقتاً بسبب غياب أحد الأطراف أو لسبب آخر
+        Dismissed = 4, // القضية تم رفضها أو إسقاطها من قبل المحكمة
+        Settled = 5 // القضية تم تسويتها خارج المحكمة باتفاق بين الأطراف
     }
 }

@@ -57,8 +57,14 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("ConfidenceLevel")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("DocumentId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Vulnerabilities")
                         .IsRequired()
@@ -81,7 +87,7 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("AppealDate")
+                    b.Property<DateTime?>("AppealDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("AppealType")
@@ -98,6 +104,12 @@ namespace Persistence.Data.Migrations
 
                     b.Property<int>("DecisionId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LawyerId")
                         .HasColumnType("nvarchar(450)");
@@ -125,14 +137,11 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.HasIndex("DecisionId")
-                        .IsUnique();
+                    b.HasIndex("DecisionId");
 
                     b.HasIndex("LawyerId");
 
-                    b.HasIndex("ResultDecisionId")
-                        .IsUnique()
-                        .HasFilter("[ResultDecisionId] IS NOT NULL");
+                    b.HasIndex("ResultDecisionId");
 
                     b.ToTable("Appeals");
                 });
@@ -159,6 +168,9 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("CrimeCategory")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -166,6 +178,9 @@ namespace Persistence.Data.Migrations
                     b.Property<string>("FileNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Jurisdiction")
                         .HasColumnType("int");
@@ -201,6 +216,12 @@ namespace Persistence.Data.Migrations
 
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LawyerId")
                         .HasColumnType("nvarchar(450)");
@@ -240,6 +261,72 @@ namespace Persistence.Data.Migrations
                     b.ToTable("CaseParties");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MessageSender")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatSessionId");
+
+                    b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LawyerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LawyerId");
+
+                    b.ToTable("ChatSessions");
+                });
+
             modelBuilder.Entity("Domain.Entities.CourtSession", b =>
                 {
                     b.Property<int>("Id")
@@ -248,18 +335,51 @@ namespace Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdjournmentReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CancelledReason")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("CourtName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourtRoom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Floor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JudgeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NextSessionId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("ReminderDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("SessionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("SessionStatus")
+                        .HasColumnType("int");
 
                     b.Property<int>("SessionType")
                         .HasColumnType("int");
@@ -267,6 +387,8 @@ namespace Persistence.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
+
+                    b.HasIndex("NextSessionId");
 
                     b.ToTable("CourtSessions");
                 });
@@ -297,11 +419,20 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("DecisionType")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsFinalVerdict")
                         .HasColumnType("bit");
 
                     b.Property<string>("JudgeName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("NextSessionDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SentenceText")
                         .IsRequired()
@@ -336,11 +467,17 @@ namespace Persistence.Data.Migrations
                     b.Property<int?>("CourtSessionId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAnalyzedByAI")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("LawyerId")
@@ -473,6 +610,9 @@ namespace Persistence.Data.Migrations
                     b.Property<int?>("CourtSessionId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -480,6 +620,9 @@ namespace Persistence.Data.Migrations
                     b.Property<string>("IPAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("NewValues")
                         .HasColumnType("nvarchar(max)");
@@ -516,6 +659,9 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -526,6 +672,9 @@ namespace Persistence.Data.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("NationalIdNumber")
                         .IsRequired()
@@ -693,6 +842,9 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DeliveryAttempts")
                         .HasColumnType("int");
 
@@ -709,6 +861,9 @@ namespace Persistence.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsRead")
@@ -788,7 +943,7 @@ namespace Persistence.Data.Migrations
             modelBuilder.Entity("Domain.Entities.AiAnalysis", b =>
                 {
                     b.HasOne("Domain.Entities.Case", "Case")
-                        .WithMany()
+                        .WithMany("AiAnalyses")
                         .HasForeignKey("CaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -815,8 +970,8 @@ namespace Persistence.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Decision", "OriginalDecision")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Appeal", "DecisionId")
+                        .WithMany("Appeals")
+                        .HasForeignKey("DecisionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -826,8 +981,8 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Decision", "ResultDecision")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Appeal", "ResultDecisionId")
+                        .WithMany()
+                        .HasForeignKey("ResultDecisionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("AppealingParty");
@@ -867,6 +1022,28 @@ namespace Persistence.Data.Migrations
                     b.Navigation("Person");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatMessage", b =>
+                {
+                    b.HasOne("Domain.Entities.ChatBotAIEntities.ChatSession", "ChatSession")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("ChatSessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ChatSession");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatSession", b =>
+                {
+                    b.HasOne("Domain.Entities.Lawyer", "Lawyer")
+                        .WithMany("ChatSessions")
+                        .HasForeignKey("LawyerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Lawyer");
+                });
+
             modelBuilder.Entity("Domain.Entities.CourtSession", b =>
                 {
                     b.HasOne("Domain.Entities.Case", "Case")
@@ -875,7 +1052,13 @@ namespace Persistence.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.CourtSession", "NextSession")
+                        .WithMany()
+                        .HasForeignKey("NextSessionId");
+
                     b.Navigation("Case");
+
+                    b.Navigation("NextSession");
                 });
 
             modelBuilder.Entity("Domain.Entities.Decision", b =>
@@ -1096,6 +1279,8 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Case", b =>
                 {
+                    b.Navigation("AiAnalyses");
+
                     b.Navigation("Appeals");
 
                     b.Navigation("CaseParties");
@@ -1107,6 +1292,11 @@ namespace Persistence.Data.Migrations
                     b.Navigation("Documents");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ChatBotAIEntities.ChatSession", b =>
+                {
+                    b.Navigation("ChatMessages");
+                });
+
             modelBuilder.Entity("Domain.Entities.CourtSession", b =>
                 {
                     b.Navigation("Decisions");
@@ -1114,9 +1304,16 @@ namespace Persistence.Data.Migrations
                     b.Navigation("Documents");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Decision", b =>
+                {
+                    b.Navigation("Appeals");
+                });
+
             modelBuilder.Entity("Domain.Entities.Lawyer", b =>
                 {
                     b.Navigation("Appeals");
+
+                    b.Navigation("ChatSessions");
 
                     b.Navigation("Documents");
                 });

@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Contracts;
+using Domain.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Decision : BaseEntity<int>
+    public class Decision : BaseEntity<int> , ISoftDelete
     {
         public DateTime DecisionDate { get; set; } // تاريخ الحكم
+        public DateTime? NextSessionDate { get; set; } // تاريخ الحكم
         public DecisionType DecisionType { get; set; } // نوع الحكم (مثلاً: حكم ابتدائي، حكم استئنافي)
         public bool Appealable { get; set; } // هل الحكم قابل للاستئناف
         public string SentenceText { get; set; } // نص الحكم
@@ -23,9 +25,16 @@ namespace Domain.Entities
         public CourtSession CourtSession { get; set; } // العلاقة مع جلسة المحكمة
 
 
+        public List<Appeal> Appeals { get; set; }
+
+
         // For Performance: Direct FK to Case
         public int CaseId { get; set; }
         public Case Case { get; set; } // العلاقة مع القضية
+
+
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
 
     }
 }

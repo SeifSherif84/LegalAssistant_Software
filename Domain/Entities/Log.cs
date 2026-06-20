@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Identity;
+﻿using Domain.Contracts;
+using Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Log : BaseEntity<int>
+    public class Log : BaseEntity<int>, ISoftDelete
     {
         public string UserId { get; set; } // Foreign key to UserApp
         public UserApp User { get; set; } // 
@@ -42,6 +43,9 @@ namespace Domain.Entities
         // القيم قبل وبعد التعديل (مهم للمراجعة والتدقيق)
         public string? OldValues { get; set; }
         public string? NewValues { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 
 }

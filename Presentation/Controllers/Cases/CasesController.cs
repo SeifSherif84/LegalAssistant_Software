@@ -18,8 +18,8 @@ namespace Presentation.Controllers.Cases
     [ApiController]
     public class CasesController(IServiceManager _serviceManager) : ControllerBase
     {
-        [HttpGet("GetCrimeType")]
-        [Authorize]
+        [HttpGet("GetCrimeType")] // GET: api/Cases/GetCrimeType
+        [Authorize] 
         public IActionResult GetCrimeType()
         {
             var crimeTypes = Enum.GetValues(typeof(CrimeType))
@@ -33,7 +33,8 @@ namespace Presentation.Controllers.Cases
         }
 
 
-        [HttpGet("GetJurisdiction")]
+
+        [HttpGet("GetJurisdiction")] // GET: api/Cases/GetJurisdiction
         [Authorize]
         public IActionResult GetJurisdiction()
         {
@@ -48,7 +49,8 @@ namespace Presentation.Controllers.Cases
         }
 
 
-        [HttpGet("GetCrimeCategory")]
+
+        [HttpGet("GetCrimeCategory")] // GET: api/Cases/GetCrimeCategory
         [Authorize]
         public IActionResult GetCrimeCategory()
         {
@@ -63,30 +65,76 @@ namespace Presentation.Controllers.Cases
         }
 
 
-        [HttpPost("CreateCase")]
+
+        [HttpGet("GetCaseStatus")] // GET: api/Cases/GetCaseStatus
+        [Authorize]
+        public IActionResult GetCaseStatus()
+        {
+            var caseStatuses = Enum.GetValues(typeof(CaseStatus))
+                                    .Cast<CaseStatus>()
+                                    .Select(cs => new
+                                    {
+                                        Id = (int)cs,
+                                        Name = cs.ToString()
+                                    });
+            return Ok(caseStatuses);
+        }
+
+
+
+        [HttpPost("CreateCase")] // GET: api/Cases/CreateCase
         [Authorize]
         public async Task<IActionResult> CreateCase([FromBody]CreateCaseRequest createCaseRequest)
         {
-            var lawyerId = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (lawyerId is null)
-                return BadRequest("id claim not found.");
-
-            await _serviceManager.CaseService.CreateCaseAsync(createCaseRequest, lawyerId.Value);
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.CaseService.CreateCaseAsync(createCaseRequest, lawyerId);
             return Ok("Case created successfully.");
         }
 
 
-        [HttpGet("GetAllCases")] // api/Cases/GetAllCases
+
+        [HttpGet("GetAllCases")] // GET: api/Cases/GetAllCases
         [Authorize]
-        public async Task<IActionResult> GetAllCases()
+        public async Task<IActionResult> GetAllCases([FromQuery] CaseStatus? Status, [FromQuery] bool addedWithinMonth = false)
         {
-            var lawyerId = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (lawyerId is null)
-                return BadRequest("id claim not found.");
-            var cases = await _serviceManager.CaseService.GetAllCasesAsync(lawyerId.Value);
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cases = await _serviceManager.CaseService.GetAllCasesAsync(lawyerId, Status, addedWithinMonth);
             return Ok(cases);
         }
 
+
+
+        // [HttpPut("UpdateCase")] // PUT: api/Cases/UpdateCase?caseId=1 // [FromQuery]
+        [HttpPut("UpdateCase/{caseId}")] // PUT: api/Cases/UpdateCase/{caseId} // [FromRoute]
+        [Authorize] 
+        public async Task<IActionResult> UpdateCase([FromRoute] int caseId, [FromBody] UpdateCaseRequest updateCaseRequest)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.CaseService.UpdateCaseAsync(caseId, lawyerId, updateCaseRequest);
+            return Ok("Case updated successfully.");
+        }
+
+
+
+        [HttpDelete("DeleteCase/{caseId}")] // DELETE: api/Cases/DeleteCase/{caseId}
+        [Authorize]
+        public async Task<IActionResult> DeleteCase([FromRoute] int caseId)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.CaseService.DeleteCaseAsync(caseId, lawyerId);
+            return Ok("Case deleted successfully.");
+        }
+
+
+
+        [HttpGet("GetCaseById/{caseId}")] // GET: api/Cases/GetCaseById/{caseId}
+        [Authorize]
+        public async Task<IActionResult> GetCaseById([FromRoute] int caseId)
+        {
+            var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var caseDetails = await _serviceManager.CaseService.GetCaseByIdAsync(caseId, lawyerId);
+            return Ok(caseDetails);
+        }
 
     }
 }

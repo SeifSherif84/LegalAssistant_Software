@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Contracts;
+using Domain.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Case : BaseEntity<int>
+    public class Case : BaseEntity<int>, ISoftDelete
     {
         public string Title { get; set; }
         public string Description { get; set; }
@@ -25,6 +26,10 @@ namespace Domain.Entities
 
         public List<Document> Documents { get; set; } // One-to-Many relationship with Document
         public List<CourtSession> CourtSessions { get; set; } // One-to-Many relationship with CourtSession
+        public List<Lawyer> Lawyers { get; set; } // Many-to-Many relationship with Lawyer
+        public List<CaseParty> CaseParties { get; set; } // One-to-Many relationship with CaseParty
+
+        public List<AiAnalysis> AiAnalyses { get; set; } // One-to-Many relationship with AiAnalysis
 
 
         // For performance optimization
@@ -35,11 +40,9 @@ namespace Domain.Entities
 
 
 
-        public List<Lawyer> Lawyers { get; set; } // Many-to-Many relationship with Lawyer
-        public List<CaseParty> CaseParties { get; set; } // One-to-Many relationship with CaseParty
 
-        // public DateTime? NextHearingDate { get; set; }
-        // public DateTime? VerdictDate { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }

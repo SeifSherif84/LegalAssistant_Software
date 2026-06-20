@@ -15,6 +15,7 @@ namespace Services.Mapping.Cases
         {
             CreateMap<CreateCaseRequest, Case>();
             CreateMap<Case, CaseResponse>();
+            CreateMap<UpdateCaseRequest, Case>();
         }
     }
 }

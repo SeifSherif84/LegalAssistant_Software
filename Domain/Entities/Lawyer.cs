@@ -1,4 +1,6 @@
-﻿using Domain.Entities.Enums;
+﻿using Domain.Contracts;
+using Domain.Entities.ChatBotAIEntities;
+using Domain.Entities.Enums;
 using Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Lawyer : UserApp
+    public class Lawyer : UserApp 
     {
         public int YearsOfExperience { get; set; }
         public string BarRegistrationNumber { get; set; }
@@ -22,6 +24,9 @@ namespace Domain.Entities
         public List<Document> Documents { get; set; } // One-to-Many relationship with Document
 
         public List<Appeal> Appeals { get; set; } // One-to-Many relationship with Appeal
+
+
+        public List<ChatSession> ChatSessions { get; set; } // One-to-Many relationship with ChatSessions
 
     }
 }

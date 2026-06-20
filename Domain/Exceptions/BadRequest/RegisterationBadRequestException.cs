@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Exceptions.BadRequest
 {
-    public class RegisterationBadRequestException(List<string> errors) : 
-        BadRequestException(string.Join(", ", errors))
+    public class RegisterationBadRequestException(IEnumerable<string> Errors) : 
+        BadRequestException(string.Join(", ", Errors))
     {
     }
 }

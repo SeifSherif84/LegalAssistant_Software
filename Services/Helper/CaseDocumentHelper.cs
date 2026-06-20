@@ -19,5 +19,13 @@ namespace Services.Helper
             return fileName;
         }
 
+        public static void DeleteDocument(string fileName, string folderName)
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\Cases", folderName, fileName);
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+        }
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Domain.Exceptions.AlreadyTaken;
 using Domain.Exceptions.BadRequest;
 using Domain.Exceptions.NotFound;
+using Domain.Exceptions.ServerError;
 using Domain.Exceptions.UnauthorizedException;
 using Shared.ErrorModels;
 
@@ -33,13 +34,13 @@ namespace Web.Middleware
             }
             catch(Exception exception)
             {
-
                 context.Response.StatusCode = exception switch
                 {
                     NotFoundException => StatusCodes.Status404NotFound,
                     BadRequestException => StatusCodes.Status400BadRequest,
                     UnauthorizedException => StatusCodes.Status401Unauthorized,
                     AlreadyTakenException => StatusCodes.Status409Conflict,
+                    ServerErrorExceptionText => StatusCodes.Status500InternalServerError,
                     _ => StatusCodes.Status500InternalServerError
                 };
 

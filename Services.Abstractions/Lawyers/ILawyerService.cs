@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Shared.Dtos.Dashboard;
 using Shared.Dtos.Lawyers;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,10 @@ namespace Services.Abstractions.Lawyers
 {
     public interface ILawyerService
     {
-        Task<LawyerResponse> GetLawyerInfo(string lawyerId);
+        Task<LawyerResponse> GetLawyerInfoAsync(string lawyerId);
+        Task UpdateAsync(string lawyerId, LawyerUpdateRequest lawyerUpdateRequest);
+        Task UpdateProfilePictureAsync(string lawyerId, LawyerUpdateProfilePictureRequest lawyerUpdateProfilePictureRequest);
+        Task<DashboardResponse> MyDashboardAsync(string lawyerId);
+        Task<IEnumerable<DecisionResponseForDashboard>> GetDecisionsWithAppealDeadlineThisWeekAsync(string lawyerId);
     }
 }

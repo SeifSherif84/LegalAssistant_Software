@@ -38,13 +38,7 @@ namespace Presentation.Controllers.Authentications
         [HttpPost("ResetPassword")] // POST: api/authentication/ResetPassword
         public async Task<IActionResult> ResetPasswordByEmailAsync([FromBody] ResetPasswordByEmailDto model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid data. Please check the provided information.");
-
-            var flag = await _serviceManager.AuthenticationService.ResetPasswordByEmail(model);
-            if (!flag)
-                return StatusCode(500, "Failed to send email. Please try again later.");
-
+            await _serviceManager.AuthenticationService.ResetPasswordByEmail(model);
             return Ok("Password reset email sent successfully.");
         }
 
@@ -52,12 +46,7 @@ namespace Presentation.Controllers.Authentications
         [HttpPost("UpdatePassword")] // POST: api/authentication/UpdatePassword
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto updatePasswordDto) 
         {
-            if(!ModelState.IsValid)
-                return BadRequest("Invalid data. Please check the provided information.");
-
-            var result = await _serviceManager.AuthenticationService.UpdatePassword(updatePasswordDto);
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            await _serviceManager.AuthenticationService.UpdatePassword(updatePasswordDto);
             return Ok("Password updated successfully.");
         }
 
@@ -66,12 +55,8 @@ namespace Presentation.Controllers.Authentications
         [HttpDelete("DeleteAccount")] // DELETE: api/authentication/DeleteAccount
         public async Task<IActionResult> DeleteAccount()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userId == null)
-                return BadRequest("id claim not found.");
-            var result = await _serviceManager.AuthenticationService.DeleteAccountAsync(userId.Value);
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.AuthenticationService.DeleteAccountAsync(userId);
             return Ok("Account deleted successfully.");
         }
 

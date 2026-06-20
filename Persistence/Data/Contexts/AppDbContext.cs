@@ -1,11 +1,15 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts;
+using Domain.Entities;
+using Domain.Entities.ChatBotAIEntities;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
@@ -31,6 +35,8 @@ namespace Persistence.Data.Contexts
         public DbSet<Log> Logs { get; set; }
         public DbSet<Appeal> Appeals { get; set; }
         public DbSet<AiAnalysis> AiAnalyses { get; set; }
+        public DbSet<ChatSession> ChatSessions { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -40,15 +46,99 @@ namespace Persistence.Data.Contexts
             builder.Entity<Lawyer>().ToTable("Lawyers");
             builder.Entity<UserApp>().HasQueryFilter(u => !u.IsDeleted);
 
-            builder.Entity<Document>()
-                .HasQueryFilter(d => !d.Lawyer.IsDeleted);
 
-            builder.Entity<Notification>()
-                .HasQueryFilter(n => !n.User.IsDeleted);
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (entityType.BaseType == null && typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
+                    builder.Entity(entityType.ClrType).HasQueryFilter(GetIsDeletedRestriction(entityType.ClrType));
+            }
 
-            builder.Entity<Log>()
-                .HasQueryFilter(l => !l.User.IsDeleted);
+
+            static LambdaExpression GetIsDeletedRestriction(Type type)
+            {
+                ParameterExpression parameter = Expression.Parameter(type, "entity");
+                MemberExpression property = Expression.Property(parameter, nameof(ISoftDelete.IsDeleted));
+                ConstantExpression falseConstant = Expression.Constant(false);
+                BinaryExpression condition = Expression.Equal(property, falseConstant);
+                LambdaExpression lamdaCondition = Expression.Lambda(condition, parameter);
+                return lamdaCondition;
+            }
+
         }
+
+
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries()
+                          .Where(E => E.State is EntityState.Modified && E.Entity is ISoftDelete)
+                          .ToList();
+
+            foreach (var entry in entries)
+            {
+                var isDeletedProperty = entry.Property(nameof(ISoftDelete.IsDeleted));
+                if (isDeletedProperty.IsModified && (bool)isDeletedProperty.CurrentValue == true)
+                {
+                    await CascadeSoftDelete(entry);
+                }
+            }
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+
+        //private async Task CascadeSoftDelete(EntityEntry entry)
+        //{
+        //    foreach(var navigationalProperty in entry.Navigations)
+        //    {
+        //        if(!navigationalProperty.IsLoaded)
+        //            await navigationalProperty.LoadAsync();
+
+        //        if(navigationalProperty is CollectionEntry collectionEntry &&
+        //           navigationalProperty.CurrentValue is not null)
+        //        {
+        //            foreach(var dependentEntity in collectionEntry.CurrentValue)
+        //            {
+        //                await ApplySoftDelete(dependentEntity);
+        //            }
+        //        }
+
+        //        if(navigationalProperty is ReferenceEntry referenceEntry &&
+        //            navigationalProperty.CurrentValue is not null)
+        //        {
+        //            await ApplySoftDelete(referenceEntry.CurrentValue);
+        //        }
+        //    }
+        //}
+
+
+
+        private async Task CascadeSoftDelete(EntityEntry entry)
+        {
+            foreach (var navigationalPropertyCollection in entry.Collections)
+            {
+                if (!navigationalPropertyCollection.IsLoaded)
+                    await navigationalPropertyCollection.LoadAsync();
+
+                if (navigationalPropertyCollection.CurrentValue is not null)
+                {
+                    foreach (var dependentEntity in navigationalPropertyCollection.CurrentValue)
+                    {
+                        await ApplySoftDelete(dependentEntity);
+                    }
+                }
+            }
+        }
+
+        private async Task ApplySoftDelete(object entity)
+        {
+            if (entity is ISoftDelete softDeleteEntity && !softDeleteEntity.IsDeleted && entity is not Lawyer)
+            {
+                softDeleteEntity.IsDeleted = true;
+                softDeleteEntity.DeletedAt = DateTime.UtcNow;
+                await CascadeSoftDelete(Entry(entity));
+            }
+        }
+            
 
 
     }

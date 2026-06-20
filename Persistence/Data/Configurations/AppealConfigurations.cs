@@ -15,14 +15,14 @@ namespace Persistence.Data.Configurations
         {
             // 1. العلاقة مع القرار الأصلي (OriginalDecision)
             builder.HasOne(a => a.OriginalDecision)
-                   .WithOne() // أو WithOne حسب تصميمك
-                   .HasForeignKey<Appeal>(a => a.DecisionId)
+                   .WithMany(d => d.Appeals) 
+                   .HasForeignKey(a => a.DecisionId)
                    .OnDelete(DeleteBehavior.Restrict); // منع الحذف التلقائي المتسلسل
 
             // 2. العلاقة مع القرار الناتج عن الاستئناف (ResultDecision)
             builder.HasOne(a => a.ResultDecision)
-                   .WithOne()
-                   .HasForeignKey<Appeal>(a => a.ResultDecisionId)
+                   .WithMany()
+                   .HasForeignKey(a => a.ResultDecisionId)
                    .OnDelete(DeleteBehavior.Restrict); // ضروري جداً لتجنب Multiple Cascade Paths
 
             // 3. العلاقة مع القضية (Case)

@@ -21,6 +21,7 @@ using Services.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Company.PL.Helper.MailKitFeature;
 using Microsoft.Extensions.Configuration;
+using Domain.Exceptions.ServerError;
 
 namespace Services.Authentications
 {
@@ -104,7 +105,7 @@ namespace Services.Authentications
         }
 
 
-        public async Task<bool> ResetPasswordByEmail(ResetPasswordByEmailDto model)
+        public async Task ResetPasswordByEmail(ResetPasswordByEmailDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user is null)
@@ -125,11 +126,12 @@ namespace Services.Authentications
             };
 
             var result = _mailService.SendMail(email);
-            return result;
+            if (!result)
+                throw new ServerErrorExceptionText("Failed to send email. Please try again later.");
         }
 
 
-        public async Task<IdentityResult> UpdatePassword(UpdatePasswordDto updatePasswordDto)
+        public async Task UpdatePassword(UpdatePasswordDto updatePasswordDto)
         {
             var user = await _userManager.FindByEmailAsync(updatePasswordDto.Email);
             if (user is null)
@@ -137,18 +139,26 @@ namespace Services.Authentications
 
             var decodedToken = System.Web.HttpUtility.UrlDecode(updatePasswordDto.Token);
             var result = await _userManager.ResetPasswordAsync(user, decodedToken, updatePasswordDto.NewPassword);
-            return result;
+            if (!result.Succeeded)
+                throw new ServerErrorExceptionList(result.Errors.Select(E => E.Description).ToList());
         }
 
 
-        public async Task<IdentityResult> DeleteAccountAsync(string userId)
+        public async Task DeleteAccountAsync(string userId)
         {
+            // 1. Check userId
+            if (string.IsNullOrEmpty(userId))
+                throw new LawyerIdentifierMissedException("Lawyer identifier is missing.");
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user is null || user.IsDeleted)
                 throw new UserNotFoundException("User not found or already deleted.");
             user.IsDeleted = true;
             user.DeletedAt = DateTime.UtcNow;
-            return await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new ServerErrorExceptionList(result.Errors.Select(E => E.Description).ToList());
         }
+
     }
 }
