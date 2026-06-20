@@ -8,9 +8,9 @@ namespace Domain.Entities.Enums
 {
     public enum SessionStatus
     {
-        Scheduled,
-        Completed,
-        Postponed,
-        Cancelled
+        مجدولة,
+        مكتملة,
+        مؤجلة,
+        ملغاة
     }
 }

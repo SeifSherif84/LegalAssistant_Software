@@ -2,26 +2,26 @@
 {
     public enum Specialties
     {
-        CriminalLaw = 1,
-        CivilLaw = 2,
-        CorporateLaw = 3,
-        FamilyLaw = 4,
-        LaborLaw = 5,
-        RealEstateLaw = 6,
-        IntellectualPropertyLaw = 7,
-        TaxLaw = 8,
-        ImmigrationLaw = 9,
-        EnvironmentalLaw = 10,
-        ContractLaw = 11,
-        ConstitutionalLaw = 12,
-        InternationalLaw = 13,
-        BankingAndFinanceLaw = 14,
-        MedicalMalpracticeLaw = 15,
-        PersonalInjuryLaw = 16,
-        AdministrativeLaw = 17,
-        CyberLaw = 18,
-        MaritimeLaw = 19,
-        EntertainmentLaw = 20
+        القانون_الجنائي = 1,
+        القانون_المدني = 2,
+        قانون_الشركات = 3,
+        قانون_الأحوال_الشخصية = 4,
+        قانون_العمل = 5,
+        القانون_العقاري = 6,
+        قانون_الملكية_الفكرية = 7,
+        القانون_الضريبي = 8,
+        قانون_الهجرة = 9,
+        القانون_البيئي = 10,
+        قانون_العقود = 11,
+        القانون_الدستوري = 12,
+        القانون_الدولي = 13,
+        قانون_البنوك_والتمويل = 14,
+        قانون_الأخطاء_الطبية = 15,
+        قانون_التعويضات = 16,
+        القانون_الإداري = 17,
+        قانون_الجرائم_الإلكترونية = 18,
+        القانون_البحري = 19,
+        قانون_الإعلام_والترفيه = 20
     }
 
 }

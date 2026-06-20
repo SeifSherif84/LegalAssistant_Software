@@ -1,6 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
-using Domain.Events.Sessions;
+using Shared.Events.Sessions;
 using Domain.Exceptions.NotFound;
 using MediatR;
 using Services.Specifications.CourtSessions;
@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Services.CourtSessions.Handlers
 {
-    public class GetSessionHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetSessionEvent, CourtSession>
+    public class GetSessionHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetSessionCommand, CourtSession>
     {
-        public async Task<CourtSession> Handle(GetSessionEvent request, CancellationToken cancellationToken)
+        public async Task<CourtSession> Handle(GetSessionCommand request, CancellationToken cancellationToken)
         {
             var sessionSpec = new CourtSessionSpecifications(request.SessionId,
                                                                         false,

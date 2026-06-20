@@ -13,6 +13,7 @@ namespace Services.Specifications
         public List<Expression<Func<TEntity, object>>> Includes { get; set; }
         public Expression<Func<TEntity, bool>>? Criteria { get; set; }
         public Expression<Func<TEntity, object>> OrderByDescending { get; set; }
+        public Expression<Func<TEntity, object>> OrderBy { get; set; }
         public bool IsPaginationEnabled { get; set; }
         public int Take { get; set; }
         public int Skip { get; private set; }
@@ -23,6 +24,7 @@ namespace Services.Specifications
             Includes = new List<Expression<Func<TEntity, object>>>();
             Criteria = null;
             OrderByDescending = null;
+            OrderBy = null;
         }
         protected void ApplyPaging(int skip, int take)
         {

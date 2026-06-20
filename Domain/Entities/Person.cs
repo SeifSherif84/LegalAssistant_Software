@@ -19,7 +19,6 @@ namespace Domain.Entities
         public ContactInfo ContactInfo { get; set; } 
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
-
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
     }

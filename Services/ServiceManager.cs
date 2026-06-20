@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services.Abstractions;
 using Services.Abstractions.Authentications;
+using Services.Abstractions.CaseParty;
 using Services.Abstractions.Cases;
 using Services.Abstractions.ChatBot;
 using Services.Abstractions.CourtSessions;
@@ -17,6 +18,7 @@ using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
 using Services.Abstractions.Persons;
 using Services.Authentications;
+using Services.CaseParties;
 using Services.Cases;
 using Services.ChatBot;
 using Services.CourtSessions;
@@ -39,8 +41,10 @@ namespace Services
                                 IMailService _mailService,
                                 IUnitOfWork _unitOfWork,
                                 IConfiguration _configuration,
-                                IHttpClientFactory _httpClientFactory,
+                                IConanApiService _conanApi,
                                 IMediator _mediator,
+                                IPersonService personService,
+                                ILegalAnalysisService _legalService,
                                 ILogger<ChatBotService> _logger) : IServiceManager
     {
         public IAuthenticationService AuthenticationService { get; } = new AuthenticationService(_userManager, _JWTOptions, _mapper, _mailService, _configuration);
@@ -48,9 +52,10 @@ namespace Services
         public ICaseService CaseService => new CaseService(_mapper, _unitOfWork);
         public IDocumentService DocumentService => new DocumentService(_mapper, _unitOfWork);
         public ICourtSessionService CourtSessionService => new CourtSessionService(_mapper, _unitOfWork);
-        public IChatBotService ChatBotService => new ChatBotService(_unitOfWork, _mapper, _httpClientFactory, _logger);
+        public IChatBotService ChatBotService => new ChatBotService(_unitOfWork, _mapper, _conanApi, _legalService, _logger);
 
         public IDecisionService DecisionService => new DecisionService(_unitOfWork, _mapper, _mediator);
         public IPersonService PersonService => new PersonService(_unitOfWork, _mapper);
+        public ICasePartyService CasePartyService => new CasePartyService(_unitOfWork, _mapper, _mediator, personService);
     }
 }

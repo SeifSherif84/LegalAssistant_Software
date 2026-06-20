@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Domain.Events.Decisions;
+using Shared.Events.Decisions;
 using Shared.Dtos.CourtSessions;
 using Shared.Dtos.Decisions;
 using System;

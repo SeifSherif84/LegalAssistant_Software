@@ -12,7 +12,7 @@ namespace Services.Specifications.Persons
     {
         public PersonWithDetailsSpecification(int id) 
         {
-            Criteria = P => P.Id == id;
+            Criteria = P => P.Id == id;  
         }
         public PersonWithDetailsSpecification(PersonFilterDto filter)
         {

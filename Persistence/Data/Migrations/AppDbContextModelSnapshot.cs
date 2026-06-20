@@ -251,12 +251,9 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.HasIndex("LawyerId")
-                        .IsUnique()
-                        .HasFilter("[LawyerId] IS NOT NULL");
+                    b.HasIndex("LawyerId");
 
-                    b.HasIndex("PersonId")
-                        .IsUnique();
+                    b.HasIndex("PersonId");
 
                     b.ToTable("CaseParties");
                 });
@@ -302,6 +299,9 @@ namespace Persistence.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConanSessionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -374,6 +374,9 @@ namespace Persistence.Data.Migrations
 
                     b.Property<DateTime?>("ReminderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("ReminderSent")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("SessionDate")
                         .HasColumnType("datetime2");
@@ -678,13 +681,16 @@ namespace Persistence.Data.Migrations
 
                     b.Property<string>("NationalIdNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NationalIdNumber")
+                        .IsUnique();
 
                     b.ToTable("Persons");
                 });
@@ -1005,13 +1011,12 @@ namespace Persistence.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Lawyer", "Lawyer")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.CaseParty", "LawyerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("LawyerId");
 
                     b.HasOne("Domain.Entities.Person", "Person")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.CaseParty", "PersonId")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

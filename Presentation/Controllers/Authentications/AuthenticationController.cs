@@ -50,6 +50,14 @@ namespace Presentation.Controllers.Authentications
             return Ok("Password updated successfully.");
         }
 
+        [Authorize]
+        [HttpPost("ChangePassword")] // POST: api/authentication/ChangePassword
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _serviceManager.AuthenticationService.ChangePassword(userId, model);
+            return Ok("Password changed successfully.");
+        }
 
         [Authorize]
         [HttpDelete("DeleteAccount")] // DELETE: api/authentication/DeleteAccount

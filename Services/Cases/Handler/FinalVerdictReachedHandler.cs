@@ -2,7 +2,7 @@
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Entities.Enums;
-using Domain.Events.Decisions;
+using Shared.Events.Decisions;
 using MediatR;
 using Services.Specifications.Cases;
 using System;
@@ -21,7 +21,7 @@ namespace Services.Cases.Handler
             var caseEntity = await _unitOfWork.GetRepository<int, Case>().GetByIdAsync(caseSpec);
             if (caseEntity is not null)
             {
-                caseEntity.Status = CaseStatus.Closed;
+                caseEntity.Status = CaseStatus.مغلقة;
                 _unitOfWork.GetRepository<int, Case>().Update(caseEntity);
                 await _unitOfWork.SaveChangesAsync();
             }

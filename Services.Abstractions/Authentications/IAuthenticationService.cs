@@ -16,6 +16,8 @@ namespace Services.Abstractions.Authentications
         Task<LawyerRegisterResponse?> Register(LawyerRegisterRequest registerRequest);
         Task ResetPasswordByEmail(ResetPasswordByEmailDto model);
         Task UpdatePassword(UpdatePasswordDto updatePasswordDto);
+        Task ChangePassword(string lawyerId, ChangePasswordDto model);
         Task DeleteAccountAsync(string userId);
+
     }
 }

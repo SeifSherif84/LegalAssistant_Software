@@ -1,4 +1,5 @@
 ﻿using Services.Abstractions.Authentications;
+using Services.Abstractions.CaseParty;
 using Services.Abstractions.Cases;
 using Services.Abstractions.ChatBot;
 using Services.Abstractions.CourtSessions;
@@ -24,5 +25,6 @@ namespace Services.Abstractions
         IChatBotService ChatBotService { get; }
         IDecisionService DecisionService { get; }
         IPersonService PersonService { get; }
+        ICasePartyService CasePartyService { get; }
     }
 }

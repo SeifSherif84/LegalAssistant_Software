@@ -24,6 +24,9 @@ namespace Persistence
             if (specifications.OrderByDescending != null)
                 generatedQuery = generatedQuery.OrderByDescending(specifications.OrderByDescending);
 
+            if (specifications.OrderBy != null)
+                generatedQuery = generatedQuery.OrderBy(specifications.OrderBy);
+
             if (specifications.Includes.Count > 0)
                 generatedQuery = specifications.Includes.Aggregate(generatedQuery, (currentQuery, includeExpression) => currentQuery.Include(includeExpression)); // _context.Set<TEntity>().Include(includeExpression);
 

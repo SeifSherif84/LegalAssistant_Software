@@ -13,15 +13,15 @@ namespace Persistence.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CaseParty> builder)
         {
-           builder.HasOne(CP => CP.Person)
-                  .WithOne()
-                  .HasForeignKey<CaseParty>(CP => CP.PersonId)
-                  .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(CP => CP.Person)
+                   .WithMany() // تأكد إنها Many مش One
+                   .HasForeignKey(CP => CP.PersonId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
-           builder.HasOne(CP => CP.Lawyer)
-                  .WithOne()
-                  .HasForeignKey<CaseParty>(CP => CP.LawyerId)
-                  .OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(CP => CP.Lawyer)
+                   .WithMany() // تم التغيير من WithOne لـ WithMany
+                   .HasForeignKey(CP => CP.LawyerId) // شلنا النوع الـ Generic
+                   .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(cp => cp.Case)
                    .WithMany(c => c.CaseParties)

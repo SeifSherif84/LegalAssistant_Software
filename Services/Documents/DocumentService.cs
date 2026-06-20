@@ -107,7 +107,7 @@ namespace Services.Documents
                 document.LawyerId = lawyerId;
                 document.Title = uploadDocumentRequest.File.FileName;
                 document.UploadedAt = DateTime.UtcNow;
-                document.Status = DocumentStatus.Pending;
+                document.Status = DocumentStatus.قيد_الانتظار;
                 document.IsAnalyzedByAI = false;
                 document.AnalyzedAt = null;
                 await _unitOfWork.GetRepository<int, Document>().Add(document);
