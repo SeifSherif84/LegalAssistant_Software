@@ -24,7 +24,7 @@ namespace Shared.Dtos.Decisions
         [MaxLength(5000)]
         public string SentenceText { get; set; }
 
-        public bool Appealable { get; set; } 
+        public bool Appealable { get; set; } = true;
 
         public DateTime? AppealDeadline { get; set; }  // nullable — only required if Appealable = true
 

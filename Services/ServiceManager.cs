@@ -15,6 +15,7 @@ using Services.Abstractions.CourtSessions;
 using Services.Abstractions.Decisions;
 using Services.Abstractions.Documents;
 using Services.Abstractions.Lawyers;
+using Services.Abstractions.Persons;
 using Services.Authentications;
 using Services.Cases;
 using Services.ChatBot;
@@ -22,6 +23,7 @@ using Services.CourtSessions;
 using Services.Decisions;
 using Services.Documents;
 using Services.Lawyers;
+using Services.Persons;
 using Shared.Dtos.Authentications;
 using System;
 using System.Collections.Generic;
@@ -49,5 +51,6 @@ namespace Services
         public IChatBotService ChatBotService => new ChatBotService(_unitOfWork, _mapper, _httpClientFactory, _logger);
 
         public IDecisionService DecisionService => new DecisionService(_unitOfWork, _mapper, _mediator);
+        public IPersonService PersonService => new PersonService(_unitOfWork, _mapper);
     }
 }
